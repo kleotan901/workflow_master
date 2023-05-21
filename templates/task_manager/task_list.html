@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Task list
+    <a href="#" class="btn btn-primary link-to-page">
+      New task
+    </a>
+  </h1>
+
+  <div>
+    <form action="" method="get" class="form-inline">
+      {{ search_form }}
+      <input type="submit" value="🔍" class="btn btn-secondary">
+    </form>
+  </div>
+
+  <div>
+  {% if task_list %}
+    <ul class="car-list">
+      {% for task in task_list %}
+        <li>
+          <a href="#">{{ task.id }}</a>
+          {{ task.name }} ({% for worker in  task.assignees.all%}{{ worker.username }}, {% endfor %})
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no tasks</p>
+  {% endif %}
+  </div>
+{% endblock %}
