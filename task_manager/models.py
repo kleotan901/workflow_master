@@ -2,17 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class Worker(AbstractUser):
-    position = models.CharField(max_length=255)
-
-    class Meta:
-        verbose_name = "worker"
-        verbose_name_plural = "workers"
-
-    def __str__(self):
-        return f"{self.username} ({self.first_name} {self.last_name})"
-
-
 class Position(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
@@ -20,7 +9,23 @@ class Position(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return {self.name}
+        return self.name
+
+
+class Worker(AbstractUser):
+    position = models.ForeignKey(
+        Position,
+        on_delete=models.CASCADE,
+        default=None,
+        null=True
+    )
+
+    class Meta:
+        verbose_name = "worker"
+        verbose_name_plural = "workers"
+
+    def __str__(self):
+        return f"{self.username} ({self.position})"
 
 
 class TaskType(models.Model):
@@ -30,7 +35,7 @@ class TaskType(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return {self.name}
+        return self.name
 
 
 class Task(models.Model):
@@ -43,6 +48,7 @@ class Task(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     deadline = models.DateTimeField()
+    is_completed = models.BooleanField(default=False)
     priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES)
     task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
     assignees = models.ManyToManyField(Worker, related_name="tasks")
