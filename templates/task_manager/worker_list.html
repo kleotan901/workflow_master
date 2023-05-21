@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>
+      Worker List
+      <a href="#" class="btn btn-primary link-to-page">
+        Add worker
+      </a>
+    </h1>
+  <div class="search-line">
+    <form action="" method="get" class="form-inline">
+      {{ search_form }}
+      <input type="submit" value="🔍" class="btn btn-secondary">
+    </form>
+  </div>
+
+    {% if worker_list %}
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+      </tr>
+    {% for worker in worker_list %}
+      <tr>
+        <td>{{ worker.id }}</td>
+        <td><a href="#">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a></td>
+        <td>{{ worker.first_name }}</td>
+        <td>{{ worker.last_name }}</td>
+        <td>{{ worker.position }}</td>
+      </tr>
+    {% endfor %}
+
+    </table>
+    {% else %}
+      <p>There are no workers.</p>
+    {% endif %}
+{% endblock %}
