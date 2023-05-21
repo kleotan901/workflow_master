@@ -20,12 +20,7 @@ def index(request):
     return render(request, "task_manager/index.html", context=context)
 
 
-class WorkerListView(generic.ListView):
-    model = Worker
-    ordering = ["last_name"]
+class TaskListView(generic.ListView):
+    model = Task
+    ordering = ["name"]
     paginate_by = 5
-
-
-
-
-
