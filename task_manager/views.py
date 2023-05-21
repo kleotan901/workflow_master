@@ -31,3 +31,8 @@ class WorkerListView(generic.ListView):
     ordering = ["last_name"]
     paginate_by = 5
 
+
+class PositionListView(generic.ListView):
+    model = Task
+    ordering = ["name"]
+    paginate_by = 5
