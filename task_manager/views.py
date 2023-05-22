@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.views import generic
 from django.shortcuts import render
 
@@ -24,6 +26,11 @@ class TaskListView(generic.ListView):
     model = Task
     ordering = ["name"]
     paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["today"] = date.today()
+        return context
 
 
 class WorkerListView(generic.ListView):
