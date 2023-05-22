@@ -31,7 +31,7 @@
     {% for task in task_list %}
       <tr>
         <td>{{ task.id }}</td>
-        <td><a href="#">{{ task.name }}</a></td>
+        <td><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task.name }}</a></td>
         <td>{{ task.priority }}</td>
         <td>{{ task.task_type }}</td>
         <td>
