@@ -33,6 +33,16 @@ class TaskListView(generic.ListView):
         return context
 
 
+class TaskDetailView(generic.DetailView):
+    model = Task
+    #queryset = Task.objects.all().prefetch_related("tasks__type")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["today"] = date.today()
+        return context
+
+
 class WorkerListView(generic.ListView):
     model = Worker
     ordering = ["last_name"]
