@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load tz %}
 
 {% block content %}
   <h1>
@@ -17,14 +18,38 @@
 
   <div>
   {% if task_list %}
-    <ul class="car-list">
-      {% for task in task_list %}
-        <li>
-          <a href="#">{{ task.id }}</a>
-          {{ task.name }} ({% for worker in  task.assignees.all%}{{ worker.username }}, {% endfor %})
-        </li>
-      {% endfor %}
-    </ul>
+    <table class="table">
+      <tr>
+        <th>ID</th>
+        <th>Task</th>
+        <th>Priority</th>
+        <th>Type</th>
+        <th>Assignees for the task</th>
+        <th>Deadline</th>
+
+      </tr>
+    {% for task in task_list %}
+      <tr>
+        <td>{{ task.id }}</td>
+        <td><a href="#">{{ task.name }}</a></td>
+        <td>{{ task.priority }}</td>
+        <td>{{ task.task_type }}</td>
+        <td>
+          {% for worker in  task.assignees.all%}{{ worker.username }} {% endfor %}
+        </td>
+        <td>
+          {% if task.is_completed %}
+            ✅ task completed
+          {% elif task.is_completed is False and task.deadline|date:"Y-m-d" < today|date:"Y-m-d" %}
+            😱 task is overdue ({{ task.deadline|date:"Y-m-d" }})
+          {% else %}
+            {{ task.deadline }}
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+
+    </table>
   {% else %}
     <p>There are no tasks</p>
   {% endif %}
