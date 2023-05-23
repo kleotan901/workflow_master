@@ -2,48 +2,45 @@
 
 {% block content %}
   <h1>
-    {{ task.name }}
-    <a href="#" class="btn btn-danger link-to-page">
+    Username: {{ worker.username }}
+    <a href="" class="btn btn-danger link-to-page">
       Delete
     </a>
-    <a href="#" class="btn btn-secondary link-to-page">
+
+    <a href="" class="btn btn-secondary link-to-page">
       Update
     </a>
-
-    {% if task.is_completed %}
-      <span class="badge rounded-pill bg-success">task completed</span>
-    {% elif task.is_completed is False and task.deadline|date:"Y-m-d" < today|date:"Y-m-d" %}
-      <span class="badge rounded-pill bg-danger">task overdue</span>
-    {% else %}
-      <span class="badge rounded-pill bg-warning text-dark">In work...</span>
-    {% endif %}
-
   </h1>
-  <p><em>{{ task.task_type }}</em></p>
-  <p><em>Deadline: {{ task.deadline }}</em></p>
-  <p>Description: {{ task.description }}</p>
 
-  {% if task.assignees.all %}
-    <h3>Assignees:</h3>
-    {% for assignee in task.assignees.all %}
-      <ul>
-        <li>{{ assignee.username }} ({{ assignee.position }})</li>
-      </ul>
-    {% endfor %}
-  {% else %}
-    There are no assignees
-  {% endif %}
-      <a href="#" class="btn btn-danger link-to-page">
-        Delete me from this project
-      </a>
-      <a href="#" class="btn btn-success link-to-page">
-        Assign me to this project
-      </a>
+  <p><strong>First name:</strong> {{ worker.first_name }}</p>
+  <p><strong>Last name:</strong> {{ worker.last_name }}</p>
+  <p><strong>Position:</strong> {{ worker.position }}</p>
 
-  <hr>
-  <ul>
-    {% for driver in car.drivers.all %}
-      <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
-    {% endfor %}
-  </ul>
+  <div class="ml-3">
+    <h4>Tasks</h4>
+      {% if worker.tasks.exists %}
+
+        <h5>Completed projects:</h5>
+        {% for task in worker.tasks.all %}
+          {% if task.is_completed is True %}
+            <p><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task.name }}</a> - ({{ task.deadline }})</p>
+          {% endif %}
+        {% empty %}
+            <p>There are no completed projects </p>
+        {% endfor %}
+
+        <h5>Projects in progress:</h5>
+        {% for task in worker.tasks.all %}
+          {% if not task.is_completed %}
+            <p><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task.name }}</a> - ({{ task.deadline }})</p>
+          {% endif %}
+        {% empty %}
+          <p>There are no projects in works</p>
+        {% endfor %}
+
+      {% else %}
+        <p>The worker is not assigned to any project</p>
+      {% endif %}
+  </div>
+  <button><a href="#">Assign to the project</a></button>
 {% endblock %}
