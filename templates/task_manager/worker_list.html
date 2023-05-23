@@ -22,14 +22,17 @@
         <th>First name</th>
         <th>Last name</th>
         <th>Position</th>
+        <th>Number of tasks in work</th>
+
       </tr>
     {% for worker in worker_list %}
       <tr>
         <td>{{ worker.id }}</td>
-        <td><a href="#">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a></td>
+        <td><a href="{% url 'task_manager:worker-detail' pk=worker.id %}">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a></td>
         <td>{{ worker.first_name }}</td>
         <td>{{ worker.last_name }}</td>
         <td>{{ worker.position }}</td>
+        <td>{{ worker.tasks.count }}</td>
       </tr>
     {% endfor %}
 
