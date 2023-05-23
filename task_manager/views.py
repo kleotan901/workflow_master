@@ -26,19 +26,19 @@ class TaskListView(generic.ListView):
     model = Task
     ordering = ["name"]
     paginate_by = 5
+    queryset = Task.objects.all().prefetch_related("assignees", "task_type")
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(TaskListView, self).get_context_data(**kwargs)
         context["today"] = date.today()
         return context
 
 
 class TaskDetailView(generic.DetailView):
     model = Task
-    #queryset = Task.objects.all().prefetch_related("tasks__type")
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(TaskDetailView, self).get_context_data(**kwargs)
         context["today"] = date.today()
         return context
 
@@ -47,9 +47,15 @@ class WorkerListView(generic.ListView):
     model = Worker
     ordering = ["last_name"]
     paginate_by = 5
+    queryset = Worker.objects.prefetch_related("position")
+
+
+class WorkerDetailView(generic.DetailView):
+    model = Worker
 
 
 class PositionListView(generic.ListView):
     model = Position
     ordering = ["name"]
     paginate_by = 5
+    queryset = Position.objects.prefetch_related("worker_set")
