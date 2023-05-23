@@ -85,6 +85,12 @@ class PositionCreateView(generic.CreateView):
     success_url = reverse_lazy("task_manager:position-list")
 
 
+class PositionUpdateView(generic.UpdateView):
+    model = Position
+    fields = "__all__"
+    success_url = reverse_lazy("task_manager:position-list")
+
+
 class PositionDeleteView(generic.DeleteView):
     model = Position
     success_url = reverse_lazy("task_manager:position-list")
