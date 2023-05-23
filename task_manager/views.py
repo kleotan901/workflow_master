@@ -77,3 +77,9 @@ class PositionListView(generic.ListView):
     ordering = ["name"]
     paginate_by = 5
     queryset = Position.objects.prefetch_related("worker_set")
+
+
+class PositionCreateView(generic.CreateView):
+    model = Position
+    fields = "__all__"
+    success_url = reverse_lazy("task_manager:position-list")
