@@ -14,6 +14,7 @@
       <th>ID</th>
       <th>Name</th>
       <th>Number of employees</th>
+      <th>Update</th>
       <th>Delete</th>
     </tr>
 
@@ -22,6 +23,11 @@
         <td>{{ position.id }}</td>
         <td>{{ position.name }}</td>
         <td>{{ position.worker_set.count }}</td>
+        <td>
+          <a href="{% url 'task_manager:position-update' pk=position.id %}" class="btn btn-primary link-to-page">
+            Update
+          </a>
+        </td>
         <td>
           <a href="{% url 'task_manager:position-delete' pk=position.id %}" class="btn btn-primary link-to-page">
             Delete
