@@ -41,6 +41,11 @@ class TaskCreateView(generic.CreateView):
     form_class = TaskForm
 
 
+class TaskUpdateView(generic.UpdateView):
+    model = Task
+    form_class = TaskForm
+
+
 class TaskDetailView(generic.DetailView):
     model = Task
 
