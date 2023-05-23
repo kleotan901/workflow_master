@@ -46,6 +46,12 @@ class TaskUpdateView(generic.UpdateView):
     form_class = TaskForm
 
 
+class TaskDeleteView(generic.DeleteView):
+    model = Task
+    success_url = reverse_lazy("task_manager:task-list")
+
+
+
 class TaskDetailView(generic.DetailView):
     model = Task
 
