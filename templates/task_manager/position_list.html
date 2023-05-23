@@ -9,13 +9,30 @@
   </a>
   </h2>
   {% if position_list %}
-  {% for position in position_list %}
-    <ul>
-      <li>{{ position.name }} (amount of workers: {{ position.worker_set.count }})</li>
-    </ul>
+  <table class="table">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Number of employees</th>
+      <th>Delete</th>
+    </tr>
+
+    {% for position in position_list %}
+      <tr>
+        <td>{{ position.id }}</td>
+        <td>{{ position.name }}</td>
+        <td>{{ position.worker_set.count }}</td>
+        <td>
+          <a href="{% url 'task_manager:position-delete' pk=position.id %}" class="btn btn-primary link-to-page">
+            Delete
+          </a>
+        </td>
+      </tr>
     {% endfor %}
-  {% else %}
-    <p> No position in the company</p>
-  {% endif %}
+  </table>
+
+{% else %}
+    <p>There are no positions in the company.</p>
+{% endif %}
 
 {%  endblock %}
