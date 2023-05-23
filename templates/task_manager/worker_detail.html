@@ -3,7 +3,7 @@
 {% block content %}
   <h1>
     Username: {{ worker.username }}
-    <a href="" class="btn btn-danger link-to-page">
+    <a href="{% url 'task_manager:worker-delete' pk=worker.id %}" class="btn btn-danger link-to-page">
       Delete
     </a>
 
