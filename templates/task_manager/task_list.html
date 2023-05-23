@@ -4,7 +4,7 @@
 {% block content %}
   <h1>
     Task list
-    <a href="#" class="btn btn-primary link-to-page">
+    <a href="{% url 'task_manager:task-create' %}" class="btn btn-primary link-to-page">
       New task
     </a>
   </h1>
