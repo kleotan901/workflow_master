@@ -11,7 +11,8 @@ from task_manager.views import (
     TaskCreateView,
     TaskUpdateView,
     TaskDeleteView,
-    PositionCreateView
+    PositionCreateView,
+    PositionDeleteView
 )
 
 urlpatterns = [
@@ -25,6 +26,10 @@ urlpatterns = [
     path("workers/<int:pk>/", WorkerDetailView.as_view(), name="worker-detail"),
     path("positions/", PositionListView.as_view(), name="position-list"),
     path("positions/create/", PositionCreateView.as_view(), name="position-create"),
+    path("positions/<int:pk>/delete/",
+        PositionDeleteView.as_view(),
+        name="position-delete",
+    ),
 ]
 
 app_name = "task_manager"
