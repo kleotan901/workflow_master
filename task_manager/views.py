@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.shortcuts import render
 
-from .forms import TaskForm
+from .forms import TaskForm, WorkerCreationForm
 from .models import Position, Worker, Task
 
 
@@ -66,6 +66,11 @@ class WorkerListView(generic.ListView):
     ordering = ["last_name"]
     paginate_by = 5
     queryset = Worker.objects.prefetch_related("position")
+
+
+class WorkerCreateView(generic.CreateView):
+    model = Worker
+    form_class = WorkerCreationForm
 
 
 class WorkerDetailView(generic.DetailView):
