@@ -2,11 +2,16 @@
 
 {%  block content %}
 
-  <h2>Position list</h2>
+  <h2>
+    Position list
+  <a href="{% url 'task_manager:position-create' %}" class="btn btn-primary link-to-page">
+      Create position
+  </a>
+  </h2>
   {% if position_list %}
   {% for position in position_list %}
     <ul>
-      <li>{{ position.name }} ({{ position }})</li>
+      <li>{{ position.name }} (amount of workers: {{ position.worker_set.count }})</li>
     </ul>
     {% endfor %}
   {% else %}
