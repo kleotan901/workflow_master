@@ -72,9 +72,14 @@ class WorkerCreateView(generic.CreateView):
     model = Worker
     form_class = WorkerCreationForm
 
+class WorkerUpdateView(generic.UpdateView):
+    model = Worker
+    form_class = WorkerCreationForm
+
 
 class WorkerDetailView(generic.DetailView):
     model = Worker
+
 
 
 class PositionListView(generic.ListView):
