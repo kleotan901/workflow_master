@@ -1,8 +1,10 @@
 from datetime import date
 
+from django.urls import reverse_lazy
 from django.views import generic
 from django.shortcuts import render
 
+from .forms import TaskForm
 from .models import Position, Worker, Task
 
 
@@ -32,6 +34,11 @@ class TaskListView(generic.ListView):
         context = super(TaskListView, self).get_context_data(**kwargs)
         context["today"] = date.today()
         return context
+
+
+class TaskCreateView(generic.CreateView):
+    model = Task
+    form_class = TaskForm
 
 
 class TaskDetailView(generic.DetailView):
