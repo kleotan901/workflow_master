@@ -34,12 +34,15 @@
     There are no assignees
   {% endif %}
 
-      <a href="#" class="btn btn-success link-to-page">
+  {% if task not in user.tasks.all %}
+      <a href="{% url 'task_manager:toggle-task-assign' pk=task.id %}" class="btn btn-success link-to-page">
         Assign me to this project
       </a>
-      <a href="#" class="btn btn-danger link-to-page">
+   {% else %}
+      <a href="{% url 'task_manager:toggle-task-assign' pk=task.id %}" class="btn btn-danger link-to-page">
         Delete me from this project
       </a>
+  {% endif %}
 
   <hr>
   <ul>
