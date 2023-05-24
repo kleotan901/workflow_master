@@ -89,6 +89,15 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Worker
 
+    def get_context_data(self, **kwargs):
+        context = super(WorkerDetailView, self).get_context_data(**kwargs)
+        worker = self.get_object()
+        completed_tasks = worker.tasks.filter(is_completed=True)
+        tasks_in_work = worker.tasks.filter(is_completed=False)
+        context["completed_tasks"] = completed_tasks
+        context["tasks_in_work"] = tasks_in_work
+        return context
+
 
 class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Worker
