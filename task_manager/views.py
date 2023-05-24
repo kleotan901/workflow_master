@@ -71,6 +71,20 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
     queryset = Worker.objects.prefetch_related("position")
 
+    def get_context_data(self, **kwargs):
+        context = super(WorkerListView, self).get_context_data(**kwargs)
+        number_tasks_in_work = Task.objects.filter(is_completed=False)
+        context["number_tasks_in_work"] = number_tasks_in_work
+        dict_workers_with_tasks_in_work = {}
+        for task in number_tasks_in_work:
+            for worker in task.assignees.all():
+                if worker in dict_workers_with_tasks_in_work:
+                    dict_workers_with_tasks_in_work[worker] += 1
+                else:
+                    dict_workers_with_tasks_in_work[worker] = 1
+        context["dict_workers_with_tasks_in_work"] = dict_workers_with_tasks_in_work
+        return context
+
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Worker
