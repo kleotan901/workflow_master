@@ -22,7 +22,7 @@
         <th>First name</th>
         <th>Last name</th>
         <th>Position</th>
-        <th>Number of tasks in work</th>
+        <th>Number tasks in work</th>
 
       </tr>
     {% for worker in worker_list %}
@@ -32,7 +32,17 @@
         <td>{{ worker.first_name }}</td>
         <td>{{ worker.last_name }}</td>
         <td>{{ worker.position }}</td>
-        <td>{{ worker.tasks.count }}</td>
+        <td>
+          {% if worker in dict_workers_with_tasks_in_work %}
+            {% for employee, number_tasks_in_work in dict_workers_with_tasks_in_work.items %}
+              {% if employee == worker %}
+                {{ number_tasks_in_work }}
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            -
+          {% endif %}
+        </td>
       </tr>
     {% endfor %}
 
