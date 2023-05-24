@@ -20,23 +20,27 @@
     <h4>Tasks</h4>
       {% if worker.tasks.exists %}
 
-        <h5>Completed projects:</h5>
-        {% for task in worker.tasks.all %}
-          {% if task.is_completed is True %}
-            <p><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task.name }}</a> - ({{ task.deadline }})</p>
-          {% endif %}
-        {% empty %}
-            <p>There are no completed projects </p>
-        {% endfor %}
+      <h5>Completed projects:</h5>
+        {% if completed_tasks.exists %}
+          {% for task in worker.tasks.all %}
+            {% if task.is_completed is True %}
+              <p><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task.name }}</a> - ({{ task.deadline }})</p>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <p>There are no completed projects</p>
+        {% endif %}
 
-        <h5>Projects in progress:</h5>
-        {% for task in worker.tasks.all %}
-          {% if not task.is_completed %}
-            <p><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task.name }}</a> - ({{ task.deadline }})</p>
-          {% endif %}
-        {% empty %}
+      <h5>Projects in progress:</h5>
+        {% if tasks_in_work.exists %}
+          {% for task in worker.tasks.all %}
+            {% if not task.is_completed %}
+              <p><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task.name }}</a> - ({{ task.deadline }})</p>
+            {% endif %}
+          {% endfor %}
+        {% else %}
           <p>There are no projects in works</p>
-        {% endfor %}
+        {% endif %}
 
       {% else %}
         <p>The worker is not assigned to any project</p>
