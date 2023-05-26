@@ -1,19 +1,22 @@
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
 
 {% block content %}
-  <h1>Delete position?</h1>
+  <div class="container">
+    <div class="row">
+      <h5>Delete position {{ position.name }}?</h5>
+    </div>
 
-  <div class="delete-confirmation">
-
-  <form action="" method="post">
-    {% csrf_token %}
-    <input type="submit" value="Yes, delete!" class="btn btn-danger">
-  </form>
-
-    <a href="{% url 'task_manager:position-list' %}" class="btn btn-secondary link-to-page">
-      No, cancel
-    </a>
+    <div class="delete-confirmation">
+        <form action="" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Yes, delete!" class="btn btn-danger">
+        </form>
+      <div class="btn-cancel">
+        <a href="{% url 'task_manager:position-list' %}" class="btn btn-secondary link-to-page">
+          No, cancel
+        </a>
+      </div>
+    </div>
 
   </div>
-
 {% endblock %}

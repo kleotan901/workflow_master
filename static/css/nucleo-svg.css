@@ -8,9 +8,9 @@ Icon colors
 .icon {
   display: inline-block;
   /* icon primary color */
-  color: #111111;
-  height: 1em;
-  width: 1em;
+  color: rgba(28, 30, 37, 0.5);
+  height: 10em;
+  width: 10em;
 }
 
 .icon use {

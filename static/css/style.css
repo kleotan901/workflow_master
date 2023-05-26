@@ -1,0 +1,66 @@
+body{
+    background-color: #82b8c2;
+    color: #0e456d;
+}
+.col-6.col-lg-4{
+   text-align: right;
+}
+.head-assignees{
+    padding-top: 25px;
+    border-bottom: 1px solid rgba(63, 63, 168, 0.2);
+}
+.container{
+    max-width: 100%;
+    overflow: auto;
+}
+.table {
+  max-width: 100%;
+  width: 300px;
+  table-layout: fixed;
+}
+.table th,
+.table td {
+  padding: 10px;
+  text-align: left;
+}
+
+.table th:nth-child(1),
+.table td:nth-child(1) {
+    width: 30%;
+}
+.row .col-buttons{
+    margin-left: 30px;
+    width: 400px;
+}
+
+.text-lists{
+    font-size: 14px;
+    font-style: inherit;
+}
+.links-list{
+    color: #3940c2;
+}
+
+.delete-confirmation{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    margin-top: 10px;
+}
+.btn-cancel{
+    margin-left: 20px;
+}
+.pagination{
+    margin-left: 30px;
+    color: #123e5b;
+}
+.badge{
+    width: 180px;
+}
+.head-description{
+    color: #9639c4;
+    font-weight: bold;
+}
+.description{
+    font-size: 15px;
+}

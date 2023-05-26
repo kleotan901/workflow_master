@@ -14000,18 +14000,18 @@ label,
   height: 48px;
   background-position: center;
   border-radius: 0.75rem; }
-  .icon-shape i {
+  .icon-shape .bi {
     color: #fff;
-    opacity: 0.8;
-    top: 11px;
+    opacity: 0.9;
+    top: 10px;
     position: relative; }
-  .icon-shape .ni {
+  .icon-shape .bi {
     top: 14px; }
 
 .icon-xxs {
   width: 20px;
   height: 20px; }
-  .icon-xxs i {
+  .icon-xxs .bi {
     top: -4px;
     font-size: .5rem; }
 
@@ -14025,14 +14025,14 @@ label,
 .icon-sm {
   width: 32px;
   height: 32px; }
-  .icon-sm i {
+  .icon-sm .bi {
     top: 2px;
     font-size: .65rem; }
 
 .icon-md {
   width: 48px;
   height: 48px; }
-  .icon-md i {
+  .icon-md .bi {
     top: 22%;
     font-size: 0.875rem; }
   .icon-md.icon-striped {
@@ -14046,13 +14046,13 @@ label,
 .icon-lg {
   width: 64px;
   height: 64px; }
-  .icon-lg i {
+  .icon-lg .bi {
     top: 31%;
     font-size: 1.25rem; }
   .icon-lg.icon-striped {
     background-position-x: 111px;
     background-position-y: 111px; }
-    .icon-lg.icon-striped i {
+    .icon-lg.icon-striped .bi {
       top: 21%;
       margin-left: -15px; }
 
@@ -14060,13 +14060,13 @@ label,
   width: 100px;
   height: 100px;
   border-radius: 0.75rem; }
-  .icon-xl i {
+  .icon-xl .bi {
     top: 37%;
     font-size: 1.6rem; }
   .icon-xl.icon-striped {
     background-position-x: 80px;
     background-position-y: 80px; }
-    .icon-xl.icon-striped i {
+    .icon-xl.icon-striped .bi {
       top: 30%;
       margin-left: -15px; }
 
@@ -15730,9 +15730,7 @@ hr.horizontal {
     height: 3px;
     width: 120px;
     margin: 0; }
-  .table td,
-  .table th {
-    white-space: nowrap; }
+
   .table.align-items-center td,
   .table.align-items-center th {
     vertical-align: middle; }

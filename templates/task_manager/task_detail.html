@@ -1,53 +1,72 @@
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
+{% load static %}
 
 {% block content %}
-  <h1>
-    {{ task.name }}
-    <a href="{% url 'task_manager:task-update' pk=task.id %}" class="btn btn-secondary link-to-page">
-      Update
-    </a>
-    <a href="{% url 'task_manager:task-delete' pk=task.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-lg-8"> <h5 class="task-title">{{ task.name }}</h5> </div>
+        <div class="col-6 col-lg-4">
+          {% if task.is_completed %}
+            <span class="badge rounded-pill bg-success">task completed</span>
+          {% elif task.is_completed is False and task.deadline|date:"Y-m-d" < today|date:"Y-m-d" %}
+            <span class="badge rounded-pill bg-danger">task overdue</span>
+          {% else %}
+            <span class="badge rounded-pill bg-warning text-dark">In work...</span>
+          {% endif %}
+        </div>
+      </div>
 
-    {% if task.is_completed %}
-      <span class="badge rounded-pill bg-success">task completed</span>
-    {% elif task.is_completed is False and task.deadline|date:"Y-m-d" < today|date:"Y-m-d" %}
-      <span class="badge rounded-pill bg-danger">task overdue</span>
+  <div class="row">
+    <div class="col-sm-6 col-lg-8">
+      <p><em>{{ task.task_type }}</em></p>
+      <p class="fw-bolder"><em>Deadline: {{ task.deadline|date:"d.m.Y, h:m" }}</em></p>
+      <p><h7 class="fw-bold head-description">Description:</h7> <em class="description">{{ task.description }}</em></p>
+    </div>
+  </div>
+
+    <div class="row">
+      <div class="col-sm-6 col-lg-8 head-assignees">
+      {% if task.assignees.all %}
+        <div class="task-detail-assignees-list fw-bolder">Assignees</div>
+      </div>
+      <div class="col-6 col-lg-4">
+        <div class="toggle-assign">
+        {% if task not in user.tasks.all %}
+          <a href="{% url 'task_manager:toggle-task-assign' pk=task.id %}" class="btn btn-primary link-to-page">
+            Assign me to this project
+          </a>
+        {% else %}
+          <a href="{% url 'task_manager:toggle-task-assign' pk=task.id %}" class="btn btn-secondary link-to-page">
+            Delete me from this project
+          </a>
+        {% endif %}
+        </div>
+      </div>
+  </div>
+
+      <ul class="list-unstyled">
+        {% for assignee in task.assignees.all %}
+          <li>
+            <a href="{% url 'task_manager:worker-detail' pk=assignee.id %}">{{ assignee.username }}</a> ({{ assignee.position }})
+          </li>
+        {% endfor %}
+      </ul>
     {% else %}
-      <span class="badge rounded-pill bg-warning text-dark">In work...</span>
+      <p>There are no assignees</p>
     {% endif %}
 
-  </h1>
-  <p><em>{{ task.task_type }}</em></p>
-  <p><em>Deadline: {{ task.deadline }}</em></p>
-  <p>Description: {{ task.description }}</p>
+  </div>
 
-  {% if task.assignees.all %}
-    <h3>Assignees:</h3>
-    {% for assignee in task.assignees.all %}
-      <ul>
-        <li>{{ assignee.username }} ({{ assignee.position }})</li>
-      </ul>
-    {% endfor %}
-  {% else %}
-    There are no assignees
-  {% endif %}
+  <div class="row">
+  <div class="col-buttons">
+    <a href="{% url 'task_manager:task-update' pk=task.id %}" class="btn btn-outline-secondary btn-sm">
+      Update
+    </a>
+    <a href="{% url 'task_manager:task-delete' pk=task.id %}" class="btn btn-outline-danger btn-sm">
+      Delete Project
+    </a>
+    </div>
+  </div>
 
-  {% if task not in user.tasks.all %}
-      <a href="{% url 'task_manager:toggle-task-assign' pk=task.id %}" class="btn btn-success link-to-page">
-        Assign me to this project
-      </a>
-   {% else %}
-      <a href="{% url 'task_manager:toggle-task-assign' pk=task.id %}" class="btn btn-danger link-to-page">
-        Delete me from this project
-      </a>
-  {% endif %}
-
-  <hr>
-  <ul>
-    {% for driver in car.drivers.all %}
-      <li>{{ driver.username }} ({{ driver.first_name }} {{ driver.last_name }})</li>
-    {% endfor %}
-  </ul>
+</div>
 {% endblock %}

@@ -1,57 +1,49 @@
-{% extends "base.html" %}
+{% extends "layouts/base.html" %}
 {% load tz %}
 
 {% block content %}
-  <h1>
-    Task list
+  <div class="container">
+  <div class="row">
+    <div class="col-6 col-md-4">
     <a href="{% url 'task_manager:task-create' %}" class="btn btn-primary link-to-page">
       New task
     </a>
-  </h1>
-
-  <div>
-    <form action="" method="get" class="form-inline">
-      {{ search_form }}
-      <input type="submit" value="🔍" class="btn btn-secondary">
-    </form>
+    </div>
   </div>
 
-  <div>
+  <div class="row">
   {% if task_list %}
-    <table class="table">
+    <table class="table task-list">
       <tr>
-        <th>ID</th>
         <th>Task</th>
         <th>Priority</th>
         <th>Type</th>
-        <th>Assignees for the task</th>
         <th>Deadline</th>
 
       </tr>
     {% for task in task_list %}
       <tr>
-        <td>{{ task.id }}</td>
-        <td><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task.name }}</a></td>
-        <td>{{ task.priority }}</td>
-        <td>{{ task.task_type }}</td>
-        <td>
-          {% for worker in  task.assignees.all%}{{ worker.username }} {% endfor %}
-        </td>
-        <td>
+        <td class="task-names"><a href="{% url 'task_manager:task-detail' pk=task.id %}" class="links-list">{{ task.name }}</a></td>
+        <td class="text-lists">{{ task.priority }}</td>
+        <td class="text-lists">{{ task.task_type }}</td>
+        <td class="text-lists">
           {% if task.is_completed %}
             ✅ task completed
           {% elif task.is_completed is False and task.deadline|date:"Y-m-d" < today|date:"Y-m-d" %}
-            😱 task is overdue ({{ task.deadline|date:"Y-m-d" }})
+            ⏰ task is overdue
           {% else %}
-            {{ task.deadline }}
+            {{ task.deadline|date:"d.m.Y" }}
           {% endif %}
         </td>
       </tr>
     {% endfor %}
+  </table>
+  </div>
 
-    </table>
   {% else %}
     <p>There are no tasks</p>
   {% endif %}
-  </div>
+
+
+</div>
 {% endblock %}

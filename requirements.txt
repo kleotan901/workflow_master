@@ -1,5 +1,6 @@
-django
+django==4.2.1
 gunicorn
 python-dotenv
 whitenoise
 django-admin-soft-dashboard==1.0.12
+crispy_bootstrap5
