@@ -1,9 +1,11 @@
+{% load query_transform %}
+
 {% if is_paginated %}
   <ul class="pagination">
 
     {% if page_obj.has_previous %}
       <li class="page-item">
-        <a href="?page={{ page_obj.previous_page_number }}" class="page-link">{{ page_obj.previous_page_number }}</a>
+        <a href="?{% query_transform request page=page_obj.previous_page_number %}" class="page-link">{{ page_obj.previous_page_number }}</a>
       </li>
     {% endif %}
 
@@ -13,7 +15,8 @@
 
     {% if page_obj.has_next %}
       <li class="page-item">
-        <a href="?page={{ page_obj.next_page_number }}" class="page-link">{{ page_obj.next_page_number }}</a>
+        <a href="?{% query_transform request page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+
       </li>
     {% endif %}
   </ul>
