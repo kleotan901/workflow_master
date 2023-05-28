@@ -1,13 +1,18 @@
 {% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
 
 {% block content %}
     <div class="container">
 
     <div class="row">
-      <div class="col-6 col-md-4">
+      <div class="col-8">
         <a href="{% url 'task_manager:worker-create' %}" class="btn btn-primary link-to-page">
           Add worker
         </a>
+        <form action="" method="get" class="form-inline">
+        {{ search_form|crispy }}
+        <input type="submit" value="" class="custom-search-btn">
+      </form>
       </div>
     </div>
 

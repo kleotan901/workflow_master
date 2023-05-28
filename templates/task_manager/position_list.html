@@ -1,12 +1,21 @@
 {%  extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
 
 {%  block content %}
 
-  <h2>
-  <a href="{% url 'task_manager:position-create' %}" class="btn btn-primary link-to-page">
-      Create position
-  </a>
-  </h2>
+  <div class="row">
+      <div class="col-8">
+      <a href="{% url 'task_manager:position-create' %}" class="btn btn-primary link-to-page">
+        Create position
+      </a>
+      <form action="" method="get" class="form-inline">
+        {{ search_form|crispy }}
+        <input type="submit" value="" class="custom-search-btn">
+      </form>
+    </div>
+  </div>
+
+<div class="row">
   {% if position_list %}
   <table class="table">
     <tr>
@@ -33,7 +42,7 @@
       </tr>
     {% endfor %}
   </table>
-
+</div>
 {% else %}
     <p>There are no positions in the company.</p>
 {% endif %}

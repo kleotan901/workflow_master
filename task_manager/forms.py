@@ -3,6 +3,7 @@ import datetime
 from django.contrib.auth import get_user_model
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.db.models import Q
 
 from task_manager.models import Task, Worker
 
@@ -30,3 +31,40 @@ class WorkerCreationForm(UserCreationForm):
             "first_name",
             "last_name",
         )
+
+
+class TaskSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search task..."})
+    )
+
+
+class WorkerSearchForm(forms.Form):
+    search_query = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search worker..."})
+    )
+
+    def search(self, queryset):
+        search_query = self.cleaned_data.get("search_query")
+        if search_query:
+            queryset = queryset.filter(
+                Q(username__icontains=search_query) |
+                Q(first_name__icontains=search_query) |
+                Q(last_name__icontains=search_query)
+
+            )
+        return queryset
+
+class PositionSearchForm(forms.Form):
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(attrs={"placeholder": "Search position..."})
+    )

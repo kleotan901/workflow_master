@@ -2,8 +2,9 @@ body{
     background-color: #82b8c2;
     color: #0e456d;
 }
-.col-6.col-lg-4{
-   text-align: right;
+.col-6 .col-lg-4{
+    text-align: right;
+    border: 3px solid forestgreen;
 }
 .head-assignees{
     padding-top: 25px;
@@ -63,4 +64,26 @@ body{
 }
 .description{
     font-size: 15px;
+}
+.col-8 {
+    display: flex;
+    width: 400px;
+}
+.form-inline{
+    margin-left: 20px;
+    padding-top: 0;
+    display: flex;
+}
+.custom-search-btn {
+    background-image: url('/static/img/search.svg');
+    background-color: rgba(210, 189, 236, 0.47);
+    background-size: cover;
+    background-position: center;
+    border-radius: 0.4em;
+    height: 28px;
+    width: 28px;
+    margin-bottom: 15px;
+    margin-left: 3px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }

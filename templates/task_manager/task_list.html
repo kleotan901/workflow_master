@@ -1,15 +1,22 @@
 {% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
 {% load tz %}
 
 {% block content %}
   <div class="container">
-  <div class="row">
-    <div class="col-6 col-md-4">
-    <a href="{% url 'task_manager:task-create' %}" class="btn btn-primary link-to-page">
-      New task
-    </a>
+
+
+    <div class="row">
+      <div class="col-8">
+      <a href="{% url 'task_manager:task-create' %}" class="btn btn-primary link-to-page">
+        New task
+      </a>
+      <form action="" method="get" class="form-inline">
+        {{ search_form|crispy }}
+        <input type="submit" value="" class="custom-search-btn">
+      </form>
     </div>
-  </div>
+    </div>
 
   <div class="row">
   {% if task_list %}
