@@ -19,6 +19,9 @@ body{
   width: 300px;
   table-layout: fixed;
 }
+.table th{
+    border-bottom: 5px solid #054b88;
+}
 .table th,
 .table td {
   padding: 10px;
@@ -55,9 +58,22 @@ body{
     margin-left: 30px;
     color: #123e5b;
 }
+.page-item{
+    width: 40px;
+    font-size: 70px;
+}
+
 .badge{
     width: 180px;
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 4px 11px rgba(0, 0, 0, 0.3);
+    transform: translateZ(0);
 }
+
+
 .head-description{
     color: #9639c4;
     font-weight: bold;
