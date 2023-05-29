@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
 
-from task_manager.models import Task, Worker
+from task_manager.models import Task, Worker, Tag
 
 
 class TaskForm(forms.ModelForm):
@@ -15,7 +15,11 @@ class TaskForm(forms.ModelForm):
     )
     deadline = forms.DateTimeField(
         widget=forms.DateInput(attrs={"type": "date"}))
-
+    tags = forms.ModelMultipleChoiceField(
+        queryset=Tag.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
 
     class Meta:
         model = Task
@@ -34,13 +38,21 @@ class WorkerCreationForm(UserCreationForm):
 
 
 class TaskSearchForm(forms.Form):
-    name = forms.CharField(
+    search_query = forms.CharField(
         max_length=255,
         required=False,
         label="",
         widget=forms.TextInput(attrs={"placeholder": "Search task..."})
     )
 
+    def search(self, queryset):
+        search_query = self.cleaned_data.get("search_query")
+        if search_query:
+            queryset = queryset.filter(
+                Q(name__icontains=search_query) |
+                Q(tags__name__icontains=search_query)
+            )
+        return queryset
 
 class WorkerSearchForm(forms.Form):
     search_query = forms.CharField(

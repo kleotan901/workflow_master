@@ -31,6 +31,7 @@
       </div>
       <div class="col-6 col-lg-4">
         <div class="toggle-assign">
+        {% if task.is_completed is False %}
         {% if task not in user.tasks.all %}
           <a href="{% url 'task_manager:toggle-task-assign' pk=task.id %}" class="btn btn-primary link-to-page">
             Assign me to this project
@@ -39,6 +40,7 @@
           <a href="{% url 'task_manager:toggle-task-assign' pk=task.id %}" class="btn btn-secondary link-to-page">
             Delete me from this project
           </a>
+        {% endif %}
         {% endif %}
         </div>
       </div>
@@ -66,7 +68,5 @@
       Delete Project
     </a>
     </div>
-  </div>
-
 </div>
 {% endblock %}

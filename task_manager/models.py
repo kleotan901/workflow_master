@@ -42,6 +42,13 @@ class TaskType(models.Model):
         return self.name
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=64, unique=True, default=None)
+
+    def __str__(self):
+        return self.name
+
+
 class Task(models.Model):
     PRIORITY_CHOICES = [
         ("Urgent and important", "Urgent and important"),
@@ -56,6 +63,13 @@ class Task(models.Model):
     priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES)
     task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
     assignees = models.ManyToManyField(Worker, related_name="tasks")
+    tags = models.ManyToManyField(
+        Tag,
+        related_name="tasks",
+        default=None,
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f"{self.name} {self.deadline}"

@@ -7,7 +7,12 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.shortcuts import render
 
-from .forms import TaskForm, WorkerCreationForm, TaskSearchForm, WorkerSearchForm, PositionSearchForm
+from .forms import (
+    TaskForm,
+    WorkerCreationForm,
+    TaskSearchForm, WorkerSearchForm,
+    PositionSearchForm
+)
 from .models import Position, Worker, Task
 
 
@@ -49,9 +54,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         queryset = Task.objects.all().prefetch_related("assignees", "task_type")
         form = TaskSearchForm(self.request.GET)
         if form.is_valid():
-            return queryset.filter(
-                name__icontains=form.cleaned_data["name"]
-            )
+            return form.search(queryset)
         return queryset
 
 
