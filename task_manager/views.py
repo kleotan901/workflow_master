@@ -136,6 +136,7 @@ class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
 class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Worker
     form_class = WorkerUpdateForm
+    template_name = "task_manager/worker_update_form.html"
 
 
 class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
