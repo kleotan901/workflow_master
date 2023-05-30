@@ -1,0 +1,134 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #d69cec;
+}
+.container-fluid{
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.8;
+  border-radius: 10px;
+  background-color: #cbd6fa;
+  border: none;
+  box-shadow: 0 0 10px rgba(29, 29, 77, 0.5);
+  z-index: 9999;
+}
+.navbar{
+  padding-top: 30px;
+}
+.nav-header{
+  width: 40px;
+  height: 40px;
+}
+.d-sm-inline{
+  font-size: 15px;
+  font-weight: bold;
+  padding-top: 50px;
+  padding-left: 7px;
+}
+.rocket-img{
+    background-image: url(../img/github.svg);
+    padding: 0;
+    margin-right: 0;
+    background-size: cover;
+    background-position: center;
+    border-radius: 0.4em;
+    height: 25px;
+    width: 25px;
+    border: none;
+}
+
+.container-login-page {
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  height: 100vh;
+  box-sizing: border-box;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+}
+
+.left{
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(29, 29, 77, 0.3), inset 0 0 10px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(to bottom right, rgba(109, 131, 229, 0.8), rgb(202, 218, 241));
+  border-radius: 5px;
+  width: 400px;
+}
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  font-size: 28px;
+  color: #494349;
+  margin-bottom: 10px;
+  text-shadow: 7px 7px 8px 20px rgba(0, 0, 0, 0.9);
+}
+.header h4 {
+  font-size: 16px;
+  color: #faf1f1;
+}
+
+.form {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.form input[type="text"],
+.form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(13, 17, 77, 0.5);
+}
+
+.form input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #1e1154;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 0 1px 2px rgb(122, 140, 192), inset 0 0 10px rgba(71, 96, 128, 0.67);
+}
+.form input[type="submit"]:hover {
+  background-color: #555;
+  border: none;
+}
+.field-label {
+  margin-bottom: 10px;
+}
+input[type="text"] {
+  margin-bottom: 20px; /* Add margin at the bottom of the username field */
+}
+.right {
+  background-image: url("../img/login_img.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  margin-left: 90px;
+  width: 70%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.right img {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  object-fit: cover;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%, 80% 0);
+}

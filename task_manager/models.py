@@ -67,8 +67,7 @@ class Task(models.Model):
         Tag,
         related_name="tasks",
         default=None,
-        blank=True,
-        null=True
+        blank=True
     )
 
     def __str__(self):
