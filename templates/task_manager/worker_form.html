@@ -1,12 +1,21 @@
 {% extends "layouts/base.html" %}
 {% load crispy_forms_filters %}
+
 {% block content %}
-  <h4>{{ object|yesno:"Update,Create new" }} worker</h4>
+  <div class="form-create-update">
+    <h4>Create new worker</h4>
   <form action="" method="post" novalidate>
     {% csrf_token %}
 
     {{ form|crispy }}
 
-    <input type="submit" value="Save" class="btn btn-primary">
+    <div class="buttons-wrapper">
+      <input type="submit" value="Save" class="btn btn-primary btn-save">
+      <a href="{% url 'task_manager:worker-list' %}" class="btn btn-secondary btn-cancel">
+        Cancel
+      </a>
+    </div>
   </form>
+  </div>
 {% endblock %}
+

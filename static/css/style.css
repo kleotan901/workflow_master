@@ -21,6 +21,7 @@ body{
 }
 .table th{
     border-bottom: 5px solid #054b88;
+    color: black;
 }
 .table th,
 .table td {
@@ -31,6 +32,9 @@ body{
 .table th:nth-child(1),
 .table td:nth-child(1) {
     width: 30%;
+}
+td.total-count{
+    text-align: center;
 }
 .row .col-buttons{
     margin-left: 30px;
@@ -102,4 +106,20 @@ body{
     margin-left: 3px;
     border: none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.form-create-update{
+    width: 80%;
+    margin-left: 40px;
+}
+.buttons-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 20px;
+  padding-left: 0;
+
+}
+
+.buttons-wrapper .btn-save,
+.buttons-wrapper .btn-cancel {
+  margin-left: 10px;
 }
