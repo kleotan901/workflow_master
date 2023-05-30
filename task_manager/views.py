@@ -10,8 +10,10 @@ from django.shortcuts import render
 from .forms import (
     TaskForm,
     WorkerCreationForm,
-    TaskSearchForm, WorkerSearchForm,
-    PositionSearchForm
+    WorkerUpdateForm,
+    TaskSearchForm,
+    WorkerSearchForm,
+    PositionSearchForm,
 )
 from .models import Position, Worker, Task
 
@@ -133,7 +135,7 @@ class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
 
 class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Worker
-    form_class = WorkerCreationForm
+    form_class = WorkerUpdateForm
 
 
 class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
