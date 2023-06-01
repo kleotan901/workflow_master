@@ -1,11 +1,11 @@
 from datetime import date
-
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import generic
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .forms import (
     TaskForm,
@@ -13,9 +13,21 @@ from .forms import (
     WorkerUpdateForm,
     TaskSearchForm,
     WorkerSearchForm,
-    PositionSearchForm,
+    PositionSearchForm
 )
 from .models import Position, Worker, Task
+
+
+def register_worker(request):
+    if request.method == 'POST':
+        form = WorkerCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("task_manager:index")
+    else:
+        form = WorkerCreationForm()
+    return render(request, "task_manager/worker_form.html", {"form": form})
 
 
 @login_required
@@ -48,7 +60,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         context = super(TaskListView, self).get_context_data(**kwargs)
         context["today"] = date.today()
         context["search_form"] = TaskSearchForm(initial={
-            "name": self.request.GET.get("name", "")
+            "search_query": self.request.GET.get("search_query", "")
         })
         return context
 

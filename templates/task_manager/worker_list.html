@@ -33,7 +33,7 @@
         <td class="text-lists">{{ worker.first_name }}</td>
         <td class="text-lists">{{ worker.last_name }}</td>
         <td class="text-lists">{{ worker.position }}</td>
-        <td class="text-lists">
+        <td class="text-lists total-count">
           {% if worker in dict_workers_with_tasks_in_work %}
             {% for employee, number_tasks_in_work in dict_workers_with_tasks_in_work.items %}
               {% if employee == worker %}

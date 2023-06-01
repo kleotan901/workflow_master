@@ -35,9 +35,9 @@
         <td class="text-lists">{{ task.task_type }}</td>
         <td class="text-lists">
           {% if task.is_completed %}
-            ✅ task completed
+            ✅ completed task
           {% elif task.is_completed is False and task.deadline|date:"Y-m-d" < today|date:"Y-m-d" %}
-            ⏰ task is overdue
+            ⏰ overdue task
           {% else %}
             {{ task.deadline|date:"d.m.Y" }}
           {% endif %}

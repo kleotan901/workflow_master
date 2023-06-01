@@ -3,7 +3,7 @@
 
 {% block content %}
   <div class="form-create-update">
-    <h4>Create new worker</h4>
+    <h4>{{ request.user.is_authenticated|yesno:"Create new,Register" }} worker</h4>
   <form action="" method="post" novalidate>
     {% csrf_token %}
 

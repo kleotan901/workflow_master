@@ -45,6 +45,11 @@
             <input type="submit" value="LOGIN" class="animation a6" />
             <input type="hidden" name="next" value="{{ next }}" />
           </form>
+          <br>
+          <p class="mb-0">
+            Not registered?
+            <a href="{% url 'task_manager:register' %}">Create an account</a>
+          </p>
         </div>
       </div>
    </div>

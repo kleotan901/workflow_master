@@ -17,11 +17,12 @@ from task_manager.views import (
     WorkerCreateView,
     WorkerUpdateView,
     WorkerDeleteView,
-    toggle_assign_to_task
+    toggle_assign_to_task, register_worker
 )
 
 urlpatterns = [
     path("", index, name="index"),
+    path("register/", register_worker, name="register"),
     path("tasks/", TaskListView.as_view(), name="task-list"),
     path("tasks/<int:pk>/", TaskDetailView.as_view(), name="task-detail"),
     path("tasks/create/", TaskCreateView.as_view(), name="task-create"),
