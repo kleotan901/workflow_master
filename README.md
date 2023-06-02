@@ -23,10 +23,19 @@ source venv/bin/activate
 pip install -r requirements.txt
 python3 manage.py runserver #stsrts Django Server
 ```
+
+ 
+`python manage.py loaddata task_manager_db_data.json`
+
+- After loading data from fixture you can use following superuser:
+  - Login: `admin`
+  - Password: `Qay12345`
+  
 ## Features
 
 * Authorization functionality for Worker/User
-* Managing tasks with essential details such as name, description, deadline, priority, and assignees.
+* Managing tasks with essential details such as name, description, deadline, priority, and assignees
+* Track the number of tasks in progress for each worker
 * Monitor status of tasks (in progress, completed, overdue) and the assigned workers
 
 ## Demo
