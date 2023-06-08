@@ -1,0 +1,22 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <h5>Delete type {{ tasktype.name }}?</h5>
+    </div>
+
+    <div class="delete-confirmation">
+        <form action="" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Yes, delete!" class="btn btn-danger">
+        </form>
+      <div class="btn-cancel">
+        <a href="{% url 'task_manager:task-type-list' %}" class="btn btn-secondary link-to-page">
+          No, cancel
+        </a>
+      </div>
+    </div>
+
+  </div>
+{% endblock %}

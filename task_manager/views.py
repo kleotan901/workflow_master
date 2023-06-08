@@ -13,9 +13,9 @@ from .forms import (
     WorkerUpdateForm,
     TaskSearchForm,
     WorkerSearchForm,
-    PositionSearchForm
+    PositionSearchForm, TaskTypeSearchForm, TagSearchForm
 )
-from .models import Position, Worker, Task
+from .models import Position, Worker, Task, TaskType, Tag
 
 
 def register_worker(request):
@@ -193,6 +193,86 @@ class PositionUpdateView(LoginRequiredMixin, generic.UpdateView):
 class PositionDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Position
     success_url = reverse_lazy("task_manager:position-list")
+
+
+class TaskTypeListView(LoginRequiredMixin, generic.ListView):
+    model = TaskType
+    template_name = "task_manager/task_type_list.html"
+    paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super(TaskTypeListView, self).get_context_data(**kwargs)
+        context["search_form"] = TaskTypeSearchForm(initial={
+            "name": self.request.GET.get("name", "")
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = TaskType.objects.prefetch_related("task_set")
+        form = TaskTypeSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(
+                name__icontains=form.cleaned_data["name"],
+            )
+        return queryset
+
+
+class TaskTypeCreateView(LoginRequiredMixin, generic.CreateView):
+    model = TaskType
+    fields = "__all__"
+    template_name = "task_manager/task_type_form.html"
+    success_url = reverse_lazy("task_manager:task-type-list")
+
+
+class TaskTypeUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = TaskType
+    fields = "__all__"
+    template_name = "task_manager/task_type_form.html"
+    success_url = reverse_lazy("task_manager:task-type-list")
+
+
+class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = TaskType
+    template_name = "task_manager/task_type_confirm_delete.html"
+    success_url = reverse_lazy("task_manager:task-type-list")
+
+
+class TagListView(LoginRequiredMixin, generic.ListView):
+    model = Tag
+    paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        context = super(TagListView, self).get_context_data(**kwargs)
+        context["search_form"] = TagSearchForm(initial={
+            "name": self.request.GET.get("name", "")
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = Tag.objects.prefetch_related("tasks")
+        form = TagSearchForm(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(
+                name__icontains=form.cleaned_data["name"],
+            )
+        return queryset
+
+
+class TagCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Tag
+    fields = "__all__"
+    success_url = reverse_lazy("task_manager:tag-list")
+
+
+class TagUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Tag
+    fields = "__all__"
+    success_url = reverse_lazy("task_manager:tag-list")
+
+
+class TagDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Tag
+    success_url = reverse_lazy("task_manager:tag-list")
 
 
 @login_required

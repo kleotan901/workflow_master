@@ -1,0 +1,50 @@
+{%  extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+
+{%  block content %}
+
+  <div class="row">
+      <div class="col-8">
+      <a href="{% url 'task_manager:task-type-create' %}" class="btn btn-primary link-to-page">
+        Create type
+      </a>
+      <form action="" method="get" class="form-inline">
+        {{ search_form|crispy }}
+        <input type="submit" value="" class="custom-search-btn">
+      </form>
+    </div>
+  </div>
+
+<div class="row">
+  {% if tasktype_list %}
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Number of tasks</th>
+      <th>Update</th>
+      <th>Delete</th>
+    </tr>
+
+    {% for type in tasktype_list %}
+      <tr>
+        <td>{{ type.name }}</td>
+        <td class="total-count">{{ type.task_set.count }}</td>
+        <td>
+          <a href="{% url 'task_manager:task-type-update' pk=type.id %}" class="btn btn-primary link-to-page">
+            Update
+          </a>
+        </td>
+        <td>
+          <a href="{% url 'task_manager:task-type-delete' pk=type.id %}" class="btn btn-primary link-to-page">
+            Delete
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+{% else %}
+    <p>There are no types</p>
+{% endif %}
+
+{%  endblock %}

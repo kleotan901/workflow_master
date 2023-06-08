@@ -1,0 +1,19 @@
+position_form.html{% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+{% block content %}
+  <div class="form-create-update">
+    <h4>{{ object|yesno:"Update,Create" }} type of task</h4>
+  <form action="" method="post" novalidate>
+    {% csrf_token %}
+    {{ form|crispy }}
+
+  <div class="buttons-wrapper">
+    <input type="submit" value="Save" class="btn btn-primary btn-save">
+    <a href="{% url 'task_manager:task-type-list' %}" class="btn btn-secondary btn-cancel">
+        Cancel
+    </a>
+    </div>
+  </form>
+
+</div>
+{% endblock %}
