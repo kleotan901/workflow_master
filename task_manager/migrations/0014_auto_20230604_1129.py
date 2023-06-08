@@ -7,9 +7,13 @@ from django.db.migrations import RunPython
 def reverse_func(apps, schema_editor):
     pass
 
+
 def func(apps, schema_editor):
     from django.core.management import call_command
-    call_command("loaddata", "task_manager_db_data.json")
+    import sys
+
+    if "test" not in sys.argv:
+        call_command("loaddata", "task_manager_db_data.json")
 
 
 class Migration(migrations.Migration):
