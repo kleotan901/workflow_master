@@ -3,6 +3,7 @@ import datetime
 from django.contrib.auth import get_user_model
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 
 from task_manager.models import Task, Worker, Tag
@@ -24,6 +25,14 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = "__all__"
+
+    def clean(self):
+        cleaned_data = super().clean()
+        deadline = cleaned_data.get("deadline")
+        is_completed = cleaned_data.get("is_completed")
+        if deadline.date() < datetime.date.today() and not is_completed:
+            raise ValidationError ("Deadline cannot be in the past!")
+        return cleaned_data
 
         
 class WorkerCreationForm(UserCreationForm):
@@ -83,6 +92,7 @@ class WorkerSearchForm(forms.Form):
             )
         return queryset
 
+
 class PositionSearchForm(forms.Form):
     name = forms.CharField(
         max_length=255,
@@ -90,6 +100,7 @@ class PositionSearchForm(forms.Form):
         label="",
         widget=forms.TextInput(attrs={"placeholder": "Search position..."})
     )
+
 
 class TaskTypeSearchForm(forms.Form):
     name = forms.CharField(
