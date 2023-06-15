@@ -1,6 +1,5 @@
 from datetime import date
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse_lazy
@@ -143,6 +142,7 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
 class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
     model = Worker
     form_class = WorkerCreationForm
+
 
 class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Worker
