@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 
 from task_manager.views import (
-    index,
+    HomePage,
     TaskListView,
     WorkerListView,
     PositionListView,
@@ -17,8 +17,8 @@ from task_manager.views import (
     WorkerCreateView,
     WorkerUpdateView,
     WorkerDeleteView,
-    toggle_assign_to_task,
-    register_worker,
+    ToggleAssignToTaskView,
+    RegisterWorker,
     TaskTypeListView,
     TaskTypeCreateView,
     TaskTypeUpdateView,
@@ -30,8 +30,8 @@ from task_manager.views import (
 )
 
 urlpatterns = [
-    path("", index, name="index"),
-    path("register/", register_worker, name="register"),
+    path("", HomePage.as_view(), name="index"),
+    path("register/", RegisterWorker.as_view(), name="register"),
     path("tasks/", TaskListView.as_view(), name="task-list"),
     path("tasks/<int:pk>/", TaskDetailView.as_view(), name="task-detail"),
     path("tasks/create/", TaskCreateView.as_view(), name="task-create"),
@@ -39,7 +39,7 @@ urlpatterns = [
     path("tasks/<int:pk>/delete/", TaskDeleteView.as_view(), name="task-delete"),
     path(
         "tasks/<int:pk>/toggle-assign/",
-        toggle_assign_to_task,
+        ToggleAssignToTaskView.as_view(),
         name="toggle-task-assign",
     ),
     path("workers/", WorkerListView.as_view(), name="worker-list"),

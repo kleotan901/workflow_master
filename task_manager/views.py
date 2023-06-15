@@ -2,10 +2,10 @@ from datetime import date
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.urls import reverse_lazy
-from django.views import generic
-from django.shortcuts import render, redirect
+from django.views import generic, View
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .forms import (
     TaskForm,
@@ -18,37 +18,36 @@ from .forms import (
 from .models import Position, Worker, Task, TaskType, Tag
 
 
-def register_worker(request):
-    if request.method == 'POST':
+class RegisterWorker(generic.CreateView):
+    def post(self, request, *args, **kwargs):
         form = WorkerCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect("task_manager:index")
-    else:
-        form = WorkerCreationForm()
-    return render(request, "task_manager/worker_form.html", {"form": form})
+        else:
+            context = {
+                "form": form
+            }
+            return render(request, "task_manager/worker_form.html", context)
+
+    def get(self, request, *args, **kwargs):
+        return render(request, "task_manager/worker_form.html", {"form": WorkerCreationForm()})
 
 
-@login_required
-def index(request):
-    """View function for the home page of the site."""
+class HomePage(LoginRequiredMixin, generic.ListView):
+    template_name = "task_manager/index.html"
+    queryset = Task.objects.all()
+    context_object_name = "task_list"
 
-    num_workers = Worker.objects.count()
-    num_positions = Position.objects.count()
-    num_tasks = Task.objects.count()
-    tasks_in_work = Task.objects.filter(is_completed=False)
-    completed_tasks = Task.objects.filter(is_completed=True)
-
-    context = {
-        "num_workers": num_workers,
-        "num_positions": num_positions,
-        "num_tasks": num_tasks,
-        "tasks_in_work": tasks_in_work.count(),
-        "completed_tasks": completed_tasks.count()
-    }
-
-    return render(request, "task_manager/index.html", context=context)
+    def get_context_data(self, **kwargs):
+        context = super(HomePage, self).get_context_data(**kwargs)
+        context["num_workers"] = Worker.objects.count()
+        context["num_positions"] = Position.objects.count()
+        context["num_tasks"] = self.queryset.count()
+        context["tasks_in_work"] = Task.objects.filter(is_completed=False).count()
+        context["completed_tasks"] = Task.objects.filter(is_completed=True).count()
+        return context
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
@@ -198,6 +197,7 @@ class PositionDeleteView(LoginRequiredMixin, generic.DeleteView):
 class TaskTypeListView(LoginRequiredMixin, generic.ListView):
     model = TaskType
     template_name = "task_manager/task_type_list.html"
+    ordering = ["name"]
     paginate_by = 5
 
     def get_context_data(self, **kwargs):
@@ -239,6 +239,7 @@ class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class TagListView(LoginRequiredMixin, generic.ListView):
     model = Tag
+    ordering = ["name"]
     paginate_by = 5
 
     def get_context_data(self, **kwargs):
@@ -275,13 +276,17 @@ class TagDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("task_manager:tag-list")
 
 
-@login_required
-def toggle_assign_to_task(request, pk):
-    worker = Worker.objects.get(id=request.user.id)
-    if (
-        Task.objects.get(id=pk) in worker.tasks.all()
-    ):
-        worker.tasks.remove(pk)
-    else:
-        worker.tasks.add(pk)
-    return HttpResponseRedirect(reverse_lazy("task_manager:task-detail", args=[pk]))
+class ToggleAssignToTaskView(LoginRequiredMixin, generic.View):
+    def post(self, request, pk):
+        if request.method == 'POST':
+            worker = get_object_or_404(Worker, id=request.user.id)
+            task = get_object_or_404(Task, id=pk)
+            if task in worker.tasks.all():
+                worker.tasks.remove(task)
+            else:
+                worker.tasks.add(task)
+
+            return HttpResponseRedirect(reverse_lazy("task_manager:task-detail", args=[pk]))
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseBadRequest("Invalid request method.")
