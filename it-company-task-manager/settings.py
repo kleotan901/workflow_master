@@ -33,9 +33,9 @@ STATICFILES_DIRS = [
 SECRET_KEY = secret_key = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = "RENDER" not in os.environ
+DEBUG = os.environ.get("DJANGO_DEBUG", "") != "False"
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1", "task-manager-av4g.onrender.com"]
 
 INTERNAL_IPS = [
     "127.0.0.1",
