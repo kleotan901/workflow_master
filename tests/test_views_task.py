@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
@@ -13,7 +15,7 @@ class PublicTaskTest(TestCase):
         Task.objects.create(
             name="Test task",
             description="test description_1",
-            deadline="2023-10-10 10:10",
+            deadline=date(year=2023, month=10, day=2),
             task_type=task_type
         )
         self.client = Client()
@@ -45,7 +47,7 @@ class PrivateCarTest(TestCase):
             Task.objects.create(
                 name=f"Test task_{task_id}",
                 description="test description",
-                deadline="2023-10-10 10:10",
+                deadline=date(year=2023, month=10, day=10),
                 task_type=task_type,
                 priority="High priority",
             )
@@ -117,7 +119,7 @@ class PrivateCarTest(TestCase):
                 "name": "Task Test",
                 "description": "test description",
                 "task_type": task_type.id,
-                "deadline": "2023-10-10 10:10",
+                "deadline": date(year=2023, month=10, day=2),
                 "priority": "High priority",
                 "assignees": [worker.id],
             },

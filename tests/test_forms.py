@@ -1,10 +1,13 @@
+from datetime import date
+
 from django import forms
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.test import TestCase
 from django.urls import reverse
 
-from task_manager.forms import WorkerCreationForm, TaskSearchForm, WorkerSearchForm
+from task_manager.forms import WorkerCreationForm, TaskSearchForm, WorkerSearchForm, TaskForm
 from task_manager.models import Worker, Task, Position, TaskType, Tag
 
 
@@ -58,8 +61,14 @@ class WorkerFormTest(TestCase):
 class TaskFormTest(TestCase):
     def setUp(self) -> None:
         position = Position.objects.create(name="test position")
-        TaskType.objects.create(name="test type")
+        task_type = TaskType.objects.create(name="test type")
         Tag.objects.create(name="test tag")
+        Task.objects.create(
+            name="Test task_1",
+            description="test description",
+            deadline=date(year=2023, month=10, day=10),
+            task_type=task_type,
+        )
         get_user_model().objects.create_user(
             username="TeST_22!!",
             password="test_Password123",
@@ -100,15 +109,8 @@ class TaskFormTest(TestCase):
         search_form_task_name = TaskSearchForm(data={"search_query": "task_1"})
         self.assertTrue(search_form_tag.is_valid())
         self.assertTrue(search_form_task_name.is_valid())
-
-        task_type = TaskType.objects.get(pk=1)
         tag = Tag.objects.get(name="test tag")
-        test_task = Task.objects.create(
-            name="Test task_1",
-            description="test description",
-            deadline="2023-10-10 10:10",
-            task_type=task_type,
-        )
+        test_task = Task.objects.get(pk=1)
         test_task.tags.set([tag])
         queryset = Task.objects.filter(
             Q(name__icontains="test") |
@@ -117,3 +119,55 @@ class TaskFormTest(TestCase):
 
         self.assertIn(test_task, search_form_tag.search(queryset))
         self.assertIn(test_task, search_form_task_name.search(queryset))
+
+    def test_task_form_is_valid(self):
+        task_type = TaskType.objects.get(pk=1)
+        worker = get_user_model().objects.get(pk=1)
+        form_data = {
+            "name": "test_task_1",
+            "description": "Test description",
+            "deadline": date(year=2023, month=10, day=10),
+            "priority": "High priority",
+            "task_type": task_type,
+            "assignees": [worker]
+        }
+        form = TaskForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        self.assertEqual(list(form.cleaned_data["assignees"]),  form_data["assignees"])
+        self.assertEqual(form.cleaned_data["name"], form_data["name"])
+        self.assertEqual(form.cleaned_data["description"], form_data["description"])
+        self.assertEqual(form.cleaned_data["deadline"].date(), form_data["deadline"])
+
+    def test_clean_deadline_in_past(self):
+        form = TaskForm(data={
+            "deadline": date(year=2020, month=3, day=2),
+            "is_completed": False
+        })
+        self.assertFalse(form.is_valid())
+
+        with self.assertRaises(ValidationError) as error_message:
+            form.clean()
+        self.assertEqual(
+            error_message.exception.messages,
+            ["Deadline cannot be in the past!"]
+        )
+
+    def test_task_form_updates_task_with_completed_true_when_deadline_in_past(self):
+        task_type = TaskType.objects.get(pk=1)
+        worker = get_user_model().objects.get(pk=1)
+        form_data = {
+            "name": "test_task_1",
+            "description": "Test description",
+            "deadline": date(year=2020, month=3, day=2),
+            "is_completed": True,
+            "priority": "High priority",
+            "task_type": task_type,
+            "assignees": [worker]
+        }
+        form = TaskForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        form.save()
+        task = Task.objects.get(name="test_task_1")
+        self.assertEqual(
+            task.is_completed, form.cleaned_data.get("is_completed")
+        )
