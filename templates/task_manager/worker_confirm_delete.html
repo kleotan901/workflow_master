@@ -12,7 +12,7 @@
           <input type="submit" value="Yes, delete!" class="btn btn-danger">
         </form>
       <div class="btn-cancel">
-        <a href="{% url 'task_manager:worker-detail' pk=worker.id %}" class="btn btn-secondary link-to-page">
+        <a href="{{ worker.get_absolute_url }}" class="btn btn-secondary link-to-page">
           No, cancel
         </a>
       </div>

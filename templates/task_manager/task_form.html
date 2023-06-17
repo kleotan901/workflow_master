@@ -10,7 +10,7 @@
   <div class="buttons-wrapper">
     <input type="submit" value="Submit" class="btn btn-primary">
       {% if object %}
-        <a href="{% url 'task_manager:task-detail' pk=object.id %}" class="btn btn-secondary btn-cancel">
+        <a href="{% url 'task_manager:task-list' %}" class="btn btn-secondary btn-cancel">
           Cancel
         </a>
       {% else %}

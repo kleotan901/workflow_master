@@ -10,10 +10,10 @@
       <p><h7>Position:</h7> {{ worker.position }}</p>
     </div>
     <div class="col-6 col-lg-4">
-      <a href="{% url 'task_manager:worker-update' pk=worker.id %}" class="btn btn-secondary link-to-page btn-sm">
+      <a href="{{ worker.get_absolute_url }}update" class="btn btn-secondary link-to-page btn-sm">
         Update Profile
       </a>
-      <a href="{% url 'task_manager:worker-delete' pk=worker.id %}" class="btn btn-danger link-to-page btn-sm">
+      <a href="{{ worker.get_absolute_url }}delete" class="btn btn-danger link-to-page btn-sm">
         Delete User
       </a>
     </div>
@@ -27,7 +27,7 @@
         {% if completed_tasks.exists %}
           {% for task in worker.tasks.all %}
             {% if task.is_completed is True %}
-              <p><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task.name }}</a> - (date: {{ task.deadline|date:"d.m.Y, h:m" }})</p>
+              <p><a href="{{ task.get_absolute_url }}">{{ task.name }}</a> - (date: {{ task.deadline|date:"d.m.Y, h:m" }})</p>
             {% endif %}
           {% endfor %}
         {% else %}
@@ -38,7 +38,7 @@
         {% if tasks_in_work.exists %}
           {% for task in worker.tasks.all %}
             {% if not task.is_completed %}
-              <p><a href="{% url 'task_manager:task-detail' pk=task.id %}">{{ task.name }}</a> - ({{ task.deadline }})</p>
+              <p><a href="{{ task.get_absolute_url }}">{{ task.name }}</a> - ({{ task.deadline }})</p>
             {% endif %}
           {% endfor %}
         {% else %}

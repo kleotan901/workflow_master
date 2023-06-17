@@ -11,7 +11,7 @@
 
     <div class="buttons-wrapper">
       <input type="submit" value="Save" class="btn btn-primary btn-save">
-      <a href="{% url 'task_manager:worker-detail' pk=worker.id %}" class="btn btn-secondary btn-cancel">
+      <a href="{{ worker.get_absolute_url }}" class="btn btn-secondary btn-cancel">
         Cancel
       </a>
     </div>

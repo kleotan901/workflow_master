@@ -29,7 +29,7 @@
       </tr>
     {% for worker in worker_list %}
       <tr>
-        <td class="text-lists"><a href="{% url 'task_manager:worker-detail' pk=worker.id %}" class="links-list">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a></td>
+        <td class="text-lists"><a href="{{ worker.get_absolute_url }}" class="links-list">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a></td>
         <td class="text-lists">{{ worker.first_name }}</td>
         <td class="text-lists">{{ worker.last_name }}</td>
         <td class="text-lists">{{ worker.position }}</td>

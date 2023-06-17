@@ -32,7 +32,7 @@
 
       <div class="col-6 col-lg-4">
         <div class="toggle-assign">
-          <form method="post" action="{% url 'task_manager:toggle-task-assign' pk=task.id %}">
+          <form method="post" action="{% url 'task_manager:toggle-task-assign' slug=task.slug %}">
             {% csrf_token %}
             {% if task.is_completed is False %}
               {% if task not in user.tasks.all %}
@@ -54,7 +54,7 @@
       <ul class="list-unstyled">
         {% for assignee in task.assignees.all %}
           <li>
-            <a href="{% url 'task_manager:worker-detail' pk=assignee.id %}">{{ assignee.username }}</a> ({{ assignee.position }})
+            <a href="{% url 'task_manager:worker-detail' slug=assignee.slug %}">{{ assignee.username }}</a> ({{ assignee.position }})
           </li>
         {% endfor %}
       </ul>
@@ -66,10 +66,10 @@
 
   <div class="row">
   <div class="col-buttons">
-    <a href="{% url 'task_manager:task-update' pk=task.id %}" class="btn btn-outline-secondary btn-sm">
+    <a href="{{ task.get_absolute_url }}update" class="btn btn-outline-secondary btn-sm">
       Update
     </a>
-    <a href="{% url 'task_manager:task-delete' pk=task.id %}" class="btn btn-outline-danger btn-sm">
+    <a href="{{ task.get_absolute_url }}delete" class="btn btn-outline-danger btn-sm">
       Delete Project
     </a>
     </div>
