@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.utils.text import slugify
 
 from task_manager.models import Task, Worker, Tag
 
@@ -21,6 +22,7 @@ class TaskForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         required=False
     )
+    slug = forms.SlugField(required=False, widget=forms.HiddenInput())
 
     class Meta:
         model = Task
@@ -32,10 +34,16 @@ class TaskForm(forms.ModelForm):
         is_completed = cleaned_data.get("is_completed")
         if deadline.date() < datetime.date.today() and not is_completed:
             raise ValidationError ("Deadline cannot be in the past!")
+
+        name = cleaned_data.get("name")
+        if name:
+            slug = slugify(name)
+            cleaned_data["slug"] = slug
         return cleaned_data
 
         
 class WorkerCreationForm(UserCreationForm):
+    slug = forms.SlugField(required=False, widget=forms.HiddenInput())
     class Meta(UserCreationForm.Meta):
         model = Worker
         fields = UserCreationForm.Meta.fields + (
@@ -44,8 +52,16 @@ class WorkerCreationForm(UserCreationForm):
             "last_name",
         )
 
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.slug = slugify(instance.username)
+        if commit:
+            instance.save()
+        return instance
+
 
 class WorkerUpdateForm(forms.ModelForm):
+    slug = forms.SlugField(required=False, widget=forms.HiddenInput())
     class Meta:
         model = Worker
         fields = (
@@ -54,6 +70,13 @@ class WorkerUpdateForm(forms.ModelForm):
             "first_name",
             "last_name",
         )
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.slug = slugify(instance.username)
+        if commit:
+            instance.save()
+        return instance
 
 
 class TaskSearchForm(forms.Form):
