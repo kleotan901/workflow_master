@@ -20,6 +20,7 @@ class Worker(AbstractUser):
         default=None,
         null=True
     )
+    slug = models.SlugField(max_length=50, blank=True, allow_unicode=True)
 
     class Meta:
         verbose_name = "worker"
@@ -29,7 +30,7 @@ class Worker(AbstractUser):
         return f"{self.username} ({self.position})"
 
     def get_absolute_url(self):
-        return reverse("task_manager:worker-detail", kwargs={"pk": self.pk})
+        return reverse("task_manager:worker-detail", kwargs={"slug": self.slug})
 
 
 class TaskType(models.Model):
@@ -69,9 +70,10 @@ class Task(models.Model):
         default=None,
         blank=True
     )
+    slug = models.SlugField(max_length=50, blank=True, allow_unicode=True)
 
     def __str__(self):
         return f"{self.name} {self.deadline}"
 
     def get_absolute_url(self):
-        return reverse("task_manager:task-detail", kwargs={"pk": self.pk})
+        return reverse("task_manager:task-detail", kwargs={"slug": self.slug})
