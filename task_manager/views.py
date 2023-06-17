@@ -277,16 +277,16 @@ class TagDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 class ToggleAssignToTaskView(LoginRequiredMixin, generic.View):
-    def post(self, request, pk):
+    def post(self, request, slug):
         if request.method == 'POST':
             worker = get_object_or_404(Worker, id=request.user.id)
-            task = get_object_or_404(Task, id=pk)
+            task = get_object_or_404(Task, slug=slug)
             if task in worker.tasks.all():
                 worker.tasks.remove(task)
             else:
                 worker.tasks.add(task)
 
-            return HttpResponseRedirect(reverse_lazy("task_manager:task-detail", args=[pk]))
+            return HttpResponseRedirect(reverse_lazy("task_manager:task-detail", args=[slug]))
 
     def get(self, request, *args, **kwargs):
         return HttpResponseBadRequest("Invalid request method.")
