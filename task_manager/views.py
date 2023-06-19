@@ -237,6 +237,17 @@ class TaskTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy("task_manager:task-type-list")
 
 
+class ChangeTaskStatus(generic.View):
+    def post(self, request, slug):
+        task = get_object_or_404(Task, slug=slug)
+        task.is_completed = not task.is_completed
+        task.save()
+        return HttpResponseRedirect(reverse_lazy("task_manager:task-detail", args=[slug]))
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseBadRequest("Invalid request method.")
+
+
 class TagListView(LoginRequiredMixin, generic.ListView):
     model = Tag
     ordering = ["name"]
