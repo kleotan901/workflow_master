@@ -26,7 +26,8 @@ from task_manager.views import (
     TagListView,
     TagCreateView,
     TagUpdateView,
-    TagDeleteView
+    TagDeleteView,
+    ChangeTaskStatus
 )
 
 urlpatterns = [
@@ -41,6 +42,11 @@ urlpatterns = [
         "tasks/<slug:slug>/toggle-assign/",
         ToggleAssignToTaskView.as_view(),
         name="toggle-task-assign",
+    ),
+    path(
+        "tasks/<slug:slug>/change-status/",
+        ChangeTaskStatus.as_view(),
+        name="task-change-status"
     ),
     path("workers/", WorkerListView.as_view(), name="worker-list"),
     path(
