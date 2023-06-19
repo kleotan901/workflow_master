@@ -8,10 +8,24 @@
         <div class="col-6 col-lg-4">
           {% if task.is_completed %}
             <span class="badge rounded-pill bg-success">completed</span>
+            <form action="{% url 'task_manager:task-change-status' slug=task.slug %}" method="post">
+              {% csrf_token %}
+                <button type="submit" class="btn-mark">Undo</button>
+             </form>
           {% elif task.is_completed is False and task.deadline|date:"Y-m-d" < today|date:"Y-m-d" %}
             <span class="badge rounded-pill bg-danger">overdue</span>
+            <form action="{% url 'task_manager:task-change-status' slug=task.slug %}" method="post">
+              {% csrf_token %}
+                <button type="submit" class="btn-mark">Mark as Done</button>
+            </form>
           {% else %}
             <span class="badge rounded-pill bg-warning text-dark">in progress...</span>
+
+            <form action="{% url 'task_manager:task-change-status' slug=task.slug %}" method="post">
+              {% csrf_token %}
+                <button type="submit" class="btn-mark">Mark as Done</button>
+            </form>
+
           {% endif %}
         </div>
       </div>
