@@ -73,7 +73,7 @@ td.total-count{
     padding: 8px 12px;
     background-color: #e0e0e0;
     border-radius: 4px;
-    box-shadow: 0 4px 11px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
     transform: translateZ(0);
 }
 
@@ -122,4 +122,20 @@ td.total-count{
 .buttons-wrapper .btn-save,
 .buttons-wrapper .btn-cancel {
   margin-left: 10px;
+}
+.btn-mark{
+    font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+    width: 200px;
+    color: #cb0c9f;
+    margin-top: 20px;
+    font-weight: bold;
+    padding: 8px 12px;
+    background-color: #dae1ec;
+    border-radius: 4px;
+    box-shadow: 0 3px 8px rgba(0.5, 0.5, 0.7, 0.2);
+    border: none;
+}
+.btn-mark:hover {
+  background-color: #cb0c9f;
+  color: white;
 }
