@@ -1,0 +1,91 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-lg-8"> <h5 class="task-title">{{ task.name }}</h5> </div>
+        <div class="col-6 col-lg-4">
+          {% if task.is_completed %}
+            <span class="badge rounded-pill bg-success">completed</span>
+            <form action="{% url 'task_manager:task-change-status' slug=task.slug %}" method="post">
+              {% csrf_token %}
+                <button type="submit" class="btn-mark">Undo</button>
+             </form>
+          {% elif task.is_completed is False and task.deadline|date:"Y-m-d" < today|date:"Y-m-d" %}
+            <span class="badge rounded-pill bg-danger">overdue</span>
+            <form action="{% url 'task_manager:task-change-status' slug=task.slug %}" method="post">
+              {% csrf_token %}
+                <button type="submit" class="btn-mark">Mark as Done</button>
+            </form>
+          {% else %}
+            <span class="badge rounded-pill bg-warning text-dark">in progress...</span>
+
+            <form action="{% url 'task_manager:task-change-status' slug=task.slug %}" method="post">
+              {% csrf_token %}
+                <button type="submit" class="btn-mark">Mark as Done</button>
+            </form>
+
+          {% endif %}
+        </div>
+      </div>
+
+  <div class="row">
+    <div class="col-sm-6 col-lg-8">
+      <p><em>{{ task.task_type }}</em></p>
+      <p class="fw-bolder"><em>Deadline: {{ task.deadline|date:"d.m.Y, h:m" }}</em></p>
+      <p><h7 class="fw-bold head-description">Description:</h7> <em class="description">{{ task.description }}</em></p>
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="col-sm-6 col-lg-8 head-assignees">
+      {% if task.assignees.all %}
+        <div class="task-detail-assignees-list fw-bolder">Assignees</div>
+      </div>
+
+      <div class="col-6 col-lg-4">
+        <div class="toggle-assign">
+          <form method="post" action="{% url 'task_manager:toggle-task-assign' slug=task.slug %}">
+            {% csrf_token %}
+            {% if task.is_completed is False %}
+              {% if task not in user.tasks.all %}
+                <button type="submit" class="btn btn-primary link-to-page">
+                  Assign me to this project
+                </button>
+              {% else %}
+                <button type="submit" class="btn btn-secondary link-to-page">
+                  Delete me from this project
+                </button>
+              {% endif %}
+            {% endif %}
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+      <ul class="list-unstyled">
+        {% for assignee in task.assignees.all %}
+          <li>
+            <a href="{% url 'task_manager:worker-detail' slug=assignee.slug %}">{{ assignee.username }}</a> ({{ assignee.position }})
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>There are no assignees</p>
+    {% endif %}
+
+  </div>
+
+  <div class="row">
+  <div class="col-buttons">
+    <a href="{{ task.get_absolute_url }}update" class="btn btn-outline-secondary btn-sm">
+      Update
+    </a>
+    <a href="{{ task.get_absolute_url }}delete" class="btn btn-outline-danger btn-sm">
+      Delete Project
+    </a>
+    </div>
+</div>
+{% endblock %}

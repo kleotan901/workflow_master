@@ -1,0 +1,56 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+{% load tz %}
+
+{% block content %}
+  <div class="container">
+
+
+    <div class="row">
+      <div class="col-8">
+      <a href="{% url 'task_manager:task-create' %}" class="btn btn-primary link-to-page">
+        New task
+      </a>
+      <form action="" method="get" class="form-inline">
+        {{ search_form|crispy }}
+        <input type="submit" value="" class="custom-search-btn">
+      </form>
+    </div>
+    </div>
+
+  <div class="row">
+  {% if task_list %}
+    <table class="table task-list">
+      <tr>
+        <th>Task</th>
+        <th>Priority</th>
+        <th>Type</th>
+        <th>Deadline</th>
+
+      </tr>
+    {% for task in task_list %}
+      <tr>
+        <td class="task-names"><a href="{{ task.get_absolute_url }}" class="links-list">{{ task.name }}</a></td>
+        <td class="text-lists">{{ task.priority }}</td>
+        <td class="text-lists">{{ task.task_type }}</td>
+        <td class="text-lists">
+          {% if task.is_completed %}
+            ✅ completed task
+          {% elif task.is_completed is False and task.deadline|date:"Y-m-d" < today|date:"Y-m-d" %}
+            ⏰ overdue task
+          {% else %}
+            {{ task.deadline|date:"d.m.Y" }}
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  </div>
+
+  {% else %}
+    <p>There are no tasks</p>
+  {% endif %}
+
+
+</div>
+{% endblock %}

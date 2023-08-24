@@ -1,0 +1,65 @@
+{% load crispy_forms_filters %}
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+    <!-- Nucleo Icons -->
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link href="{% static 'css/nucleo-svg.css' %}" rel="stylesheet" />
+
+    <!-- CSS Files -->
+    <link href="{% static 'css/style_login.css' %}" rel="stylesheet" />
+    <link id="pagestyle" href="{% static 'css/soft-ui-dashboard.css' %}" rel="stylesheet" />
+
+  <title>Task Manager</title>
+</head>
+
+<body class="g-sidenav-show">
+    {% include "includes/navigation-login.html" %}
+<main class="">
+
+
+<div class="container">
+<div class="row">
+
+<div class="container-login-page col-md-6 d-flex flex-column mx-auto">
+      <div class="left card-plain mt-8">
+          <h3 class="font-weight-bolder text-info text-gradient">
+            Sign IN
+          </h3>
+          <p class="mb-0">
+            Log in to your account using username and password
+          </p>
+
+        <div class="card-body">
+          <form method="post" action="{% url 'login' %}" class="form" novalidate>
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" value="LOGIN" class="animation a6" />
+            <input type="hidden" name="next" value="{{ next }}" />
+          </form>
+          <br>
+          <p class="mb-0">
+            Not registered?
+            <a href="{% url 'task_manager:register' %}">Create an account</a>
+          </p>
+        </div>
+      </div>
+   </div>
+      <div class=" col-md-6">
+          <div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
+              <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style="background-image:url('/static/img/login_img.jpeg')"></div>
+           </div>
+      </div>
+</div>
+</div>
+
+</main>
+</body>

@@ -1,0 +1,53 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+  <div class="container">
+
+  <div class="row">
+    <div class="col-sm-6 col-lg-8">
+      <h5>Username: {{ worker.username }}</h5>
+      <p><h7>Full name:</h7> {{ worker.first_name }} {{ worker.last_name }}</p>
+      <p><h7>Position:</h7> {{ worker.position }}</p>
+    </div>
+    <div class="col-6 col-lg-4">
+      <a href="{{ worker.get_absolute_url }}update" class="btn btn-secondary link-to-page btn-sm">
+        Update Profile
+      </a>
+      <a href="{{ worker.get_absolute_url }}delete" class="btn btn-danger link-to-page btn-sm">
+        Delete User
+      </a>
+    </div>
+  </div>
+
+  <div class="ml-3">
+    <h5 class="task-detail-assignees-list fw-bolder">Projects</h5>
+      {% if worker.tasks.exists %}
+
+      <h6>Completed projects:</h6>
+        {% if completed_tasks.exists %}
+          {% for task in worker.tasks.all %}
+            {% if task.is_completed is True %}
+              <p><a href="{{ task.get_absolute_url }}">{{ task.name }}</a> - (date: {{ task.deadline|date:"d.m.Y, h:m" }})</p>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <p>There are no completed projects</p>
+        {% endif %}
+
+      <h6>Projects in progress:</h6>
+        {% if tasks_in_work.exists %}
+          {% for task in worker.tasks.all %}
+            {% if not task.is_completed %}
+              <p><a href="{{ task.get_absolute_url }}">{{ task.name }}</a> - ({{ task.deadline }})</p>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <p>There are no projects in works</p>
+        {% endif %}
+
+      {% else %}
+        <p>The worker is not assigned to any project</p>
+      {% endif %}
+
+</div>
+{% endblock %}

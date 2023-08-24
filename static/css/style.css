@@ -1,0 +1,141 @@
+body{
+    background-color: #82b8c2;
+    color: #0e456d;
+}
+.col-6 .col-lg-4{
+    text-align: right;
+    border: 3px solid forestgreen;
+}
+.head-assignees{
+    padding-top: 25px;
+    border-bottom: 1px solid rgba(63, 63, 168, 0.2);
+}
+.container{
+    max-width: 100%;
+    overflow: auto;
+}
+.table {
+  max-width: 100%;
+  width: 300px;
+  table-layout: fixed;
+}
+.table th{
+    border-bottom: 5px solid #054b88;
+    color: black;
+}
+.table th,
+.table td {
+  padding: 10px;
+  text-align: left;
+}
+
+.table th:nth-child(1),
+.table td:nth-child(1) {
+    width: 30%;
+}
+td.total-count{
+    text-align: center;
+}
+.row .col-buttons{
+    margin-left: 30px;
+    width: 400px;
+}
+
+.text-lists{
+    font-size: 14px;
+    font-style: inherit;
+}
+.links-list{
+    color: #3940c2;
+}
+
+.delete-confirmation{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    margin-top: 10px;
+}
+.btn-cancel{
+    margin-left: 20px;
+}
+.pagination{
+    margin-left: 30px;
+    color: #123e5b;
+}
+.page-item{
+    width: 40px;
+    font-size: 70px;
+}
+
+.badge{
+    width: 180px;
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    transform: translateZ(0);
+}
+
+
+.head-description{
+    color: #9639c4;
+    font-weight: bold;
+}
+.description{
+    font-size: 15px;
+}
+.col-8 {
+    display: flex;
+    width: 400px;
+}
+.form-inline{
+    margin-left: 20px;
+    padding-top: 0;
+    display: flex;
+}
+.custom-search-btn {
+    background-image: url(../img/search.svg);
+    background-color: rgba(210, 189, 236, 0.47);
+    background-size: cover;
+    background-position: center;
+    border-radius: 0.4em;
+    height: 28px;
+    width: 28px;
+    margin-bottom: 15px;
+    margin-left: 3px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.form-create-update{
+    width: 80%;
+    margin-left: 40px;
+}
+.buttons-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 20px;
+  padding-left: 0;
+
+}
+
+.buttons-wrapper .btn-save,
+.buttons-wrapper .btn-cancel {
+  margin-left: 10px;
+}
+.btn-mark{
+    font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+    width: 200px;
+    color: #cb0c9f;
+    margin-top: 20px;
+    font-weight: bold;
+    padding: 8px 12px;
+    background-color: #dae1ec;
+    border-radius: 4px;
+    box-shadow: 0 3px 8px rgba(0.5, 0.5, 0.7, 0.2);
+    border: none;
+}
+.btn-mark:hover {
+  background-color: #cb0c9f;
+  color: white;
+}

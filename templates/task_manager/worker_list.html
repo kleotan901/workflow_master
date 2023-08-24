@@ -1,0 +1,55 @@
+{% extends "layouts/base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+    <div class="container">
+
+    <div class="row">
+      <div class="col-8">
+        <a href="{% url 'task_manager:worker-create' %}" class="btn btn-primary link-to-page">
+          Add worker
+        </a>
+        <form action="" method="get" class="form-inline">
+        {{ search_form|crispy }}
+        <input type="submit" value="" class="custom-search-btn">
+      </form>
+      </div>
+    </div>
+
+  <div class="row">
+    {% if worker_list %}
+    <table class="table">
+      <tr>
+        <th>Username</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Position</th>
+        <th>Number tasks in work</th>
+
+      </tr>
+    {% for worker in worker_list %}
+      <tr>
+        <td class="text-lists"><a href="{{ worker.get_absolute_url }}" class="links-list">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a></td>
+        <td class="text-lists">{{ worker.first_name }}</td>
+        <td class="text-lists">{{ worker.last_name }}</td>
+        <td class="text-lists">{{ worker.position }}</td>
+        <td class="text-lists total-count">
+          {% if worker in dict_workers_with_tasks_in_work %}
+            {% for employee, number_tasks_in_work in dict_workers_with_tasks_in_work.items %}
+              {% if employee == worker %}
+                {{ number_tasks_in_work }}
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  </div>
+</div>
+    {% else %}
+      <p>There are no workers.</p>
+    {% endif %}
+{% endblock %}
