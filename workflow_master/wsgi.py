@@ -1,5 +1,5 @@
 """
-WSGI config for it-company-task-manager project.
+WSGI config for workflow_master project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'it-company-task-manager.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'workflow_master.settings')
 
 application = get_wsgi_application()
