@@ -26,7 +26,17 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = "__all__"
+        fields = (
+            "name",
+            "description",
+            "deadline",
+            "is_completed",
+            "priority",
+            "task_type",
+            "assignees",
+            "tags",
+            "slug"
+        )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -39,6 +49,7 @@ class TaskForm(forms.ModelForm):
         if name:
             slug = slugify(name)
             cleaned_data["slug"] = slug
+
         return cleaned_data
 
         

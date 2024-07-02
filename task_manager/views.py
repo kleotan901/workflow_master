@@ -74,6 +74,10 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     form_class = TaskForm
 
+    def form_valid(self, form):
+        form.instance.creator = self.request.user
+        return super().form_valid(form)
+
 
 class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Task
