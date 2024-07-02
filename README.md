@@ -17,7 +17,7 @@ Python3 must be already installed.
 
 ```shell
 git clone https://github.com/kleotan901/workflow_master.git
-cd it-company-task-manager
+cd workflow_master
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
