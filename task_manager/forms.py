@@ -15,12 +15,9 @@ class TaskForm(forms.ModelForm):
         queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple,
     )
-    deadline = forms.DateTimeField(
-        widget=forms.DateInput(attrs={"type": "date"}))
+    deadline = forms.DateTimeField(widget=forms.DateInput(attrs={"type": "date"}))
     tags = forms.ModelMultipleChoiceField(
-        queryset=Tag.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=False
+        queryset=Tag.objects.all(), widget=forms.CheckboxSelectMultiple, required=False
     )
     slug = forms.SlugField(required=False, widget=forms.HiddenInput())
 
@@ -35,7 +32,7 @@ class TaskForm(forms.ModelForm):
             "task_type",
             "assignees",
             "tags",
-            "slug"
+            "slug",
         )
 
     def clean(self):
@@ -43,7 +40,7 @@ class TaskForm(forms.ModelForm):
         deadline = cleaned_data.get("deadline")
         is_completed = cleaned_data.get("is_completed")
         if deadline.date() < datetime.date.today() and not is_completed:
-            raise ValidationError ("Deadline cannot be in the past!")
+            raise ValidationError("Deadline cannot be in the past!")
 
         name = cleaned_data.get("name")
         if name:
@@ -52,9 +49,10 @@ class TaskForm(forms.ModelForm):
 
         return cleaned_data
 
-        
+
 class WorkerCreationForm(UserCreationForm):
     slug = forms.SlugField(required=False, widget=forms.HiddenInput())
+
     class Meta(UserCreationForm.Meta):
         model = Worker
         fields = UserCreationForm.Meta.fields + (
@@ -73,6 +71,7 @@ class WorkerCreationForm(UserCreationForm):
 
 class WorkerUpdateForm(forms.ModelForm):
     slug = forms.SlugField(required=False, widget=forms.HiddenInput())
+
     class Meta:
         model = Worker
         fields = (
@@ -95,34 +94,33 @@ class TaskSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search task..."})
+        widget=forms.TextInput(attrs={"placeholder": "Search task..."}),
     )
 
     def search(self, queryset):
         search_query = self.cleaned_data.get("search_query")
         if search_query:
             queryset = queryset.filter(
-                Q(name__icontains=search_query) |
-                Q(tags__name__icontains=search_query)
+                Q(name__icontains=search_query) | Q(tags__name__icontains=search_query)
             )
         return queryset
+
 
 class WorkerSearchForm(forms.Form):
     search_query = forms.CharField(
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search worker..."})
+        widget=forms.TextInput(attrs={"placeholder": "Search worker..."}),
     )
 
     def search(self, queryset):
         search_query = self.cleaned_data.get("search_query")
         if search_query:
             queryset = queryset.filter(
-                Q(username__icontains=search_query) |
-                Q(first_name__icontains=search_query) |
-                Q(last_name__icontains=search_query)
-
+                Q(username__icontains=search_query)
+                | Q(first_name__icontains=search_query)
+                | Q(last_name__icontains=search_query)
             )
         return queryset
 
@@ -132,7 +130,7 @@ class PositionSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search position..."})
+        widget=forms.TextInput(attrs={"placeholder": "Search position..."}),
     )
 
 
@@ -141,7 +139,7 @@ class TaskTypeSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search type..."})
+        widget=forms.TextInput(attrs={"placeholder": "Search type..."}),
     )
 
 
@@ -150,5 +148,5 @@ class TagSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search tag..."})
+        widget=forms.TextInput(attrs={"placeholder": "Search tag..."}),
     )
