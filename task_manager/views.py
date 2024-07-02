@@ -12,7 +12,9 @@ from .forms import (
     WorkerUpdateForm,
     TaskSearchForm,
     WorkerSearchForm,
-    PositionSearchForm, TaskTypeSearchForm, TagSearchForm
+    PositionSearchForm,
+    TaskTypeSearchForm,
+    TagSearchForm,
 )
 from .models import Position, Worker, Task, TaskType, Tag
 
@@ -25,13 +27,13 @@ class RegisterWorker(generic.CreateView):
             login(request, user)
             return redirect("task_manager:index")
         else:
-            context = {
-                "form": form
-            }
+            context = {"form": form}
             return render(request, "task_manager/worker_form.html", context)
 
     def get(self, request, *args, **kwargs):
-        return render(request, "task_manager/worker_form.html", {"form": WorkerCreationForm()})
+        return render(
+            request, "task_manager/worker_form.html", {"form": WorkerCreationForm()}
+        )
 
 
 class HomePage(LoginRequiredMixin, generic.ListView):
@@ -57,9 +59,9 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super(TaskListView, self).get_context_data(**kwargs)
         context["today"] = date.today()
-        context["search_form"] = TaskSearchForm(initial={
-            "search_query": self.request.GET.get("search_query", "")
-        })
+        context["search_form"] = TaskSearchForm(
+            initial={"search_query": self.request.GET.get("search_query", "")}
+        )
         return context
 
     def get_queryset(self):
@@ -74,6 +76,10 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     form_class = TaskForm
 
+    def form_valid(self, form):
+        form.instance.creator = self.request.user
+        return super().form_valid(form)
+
 
 class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Task
@@ -83,7 +89,6 @@ class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
 class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Task
     success_url = reverse_lazy("task_manager:task-list")
-
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
@@ -112,10 +117,9 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
                 else:
                     dict_workers_with_tasks_in_work[worker] = 1
         context["dict_workers_with_tasks_in_work"] = dict_workers_with_tasks_in_work
-        context["search_form"] = WorkerSearchForm(initial={
-            "search_query": self.request.GET.get("search_query", "")
-
-        })
+        context["search_form"] = WorkerSearchForm(
+            initial={"search_query": self.request.GET.get("search_query", "")}
+        )
         return context
 
     def get_queryset(self):
@@ -162,9 +166,9 @@ class PositionListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(PositionListView, self).get_context_data(**kwargs)
-        context["search_form"] = PositionSearchForm(initial={
-            "name": self.request.GET.get("name", "")
-        })
+        context["search_form"] = PositionSearchForm(
+            initial={"name": self.request.GET.get("name", "")}
+        )
         return context
 
     def get_queryset(self):
@@ -202,9 +206,9 @@ class TaskTypeListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(TaskTypeListView, self).get_context_data(**kwargs)
-        context["search_form"] = TaskTypeSearchForm(initial={
-            "name": self.request.GET.get("name", "")
-        })
+        context["search_form"] = TaskTypeSearchForm(
+            initial={"name": self.request.GET.get("name", "")}
+        )
         return context
 
     def get_queryset(self):
@@ -242,7 +246,9 @@ class ChangeTaskStatus(generic.View):
         task = get_object_or_404(Task, slug=slug)
         task.is_completed = not task.is_completed
         task.save()
-        return HttpResponseRedirect(reverse_lazy("task_manager:task-detail", args=[slug]))
+        return HttpResponseRedirect(
+            reverse_lazy("task_manager:task-detail", args=[slug])
+        )
 
     def get(self, request, *args, **kwargs):
         return HttpResponseBadRequest("Invalid request method.")
@@ -255,9 +261,9 @@ class TagListView(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(TagListView, self).get_context_data(**kwargs)
-        context["search_form"] = TagSearchForm(initial={
-            "name": self.request.GET.get("name", "")
-        })
+        context["search_form"] = TagSearchForm(
+            initial={"name": self.request.GET.get("name", "")}
+        )
         return context
 
     def get_queryset(self):
@@ -289,7 +295,7 @@ class TagDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class ToggleAssignToTaskView(LoginRequiredMixin, generic.View):
     def post(self, request, slug):
-        if request.method == 'POST':
+        if request.method == "POST":
             worker = get_object_or_404(Worker, id=request.user.id)
             task = get_object_or_404(Task, slug=slug)
             if task in worker.tasks.all():
@@ -297,7 +303,9 @@ class ToggleAssignToTaskView(LoginRequiredMixin, generic.View):
             else:
                 worker.tasks.add(task)
 
-            return HttpResponseRedirect(reverse_lazy("task_manager:task-detail", args=[slug]))
+            return HttpResponseRedirect(
+                reverse_lazy("task_manager:task-detail", args=[slug])
+            )
 
     def get(self, request, *args, **kwargs):
         return HttpResponseBadRequest("Invalid request method.")

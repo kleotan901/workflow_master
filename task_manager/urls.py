@@ -27,7 +27,7 @@ from task_manager.views import (
     TagCreateView,
     TagUpdateView,
     TagDeleteView,
-    ChangeTaskStatus
+    ChangeTaskStatus,
 )
 
 urlpatterns = [
@@ -46,35 +46,19 @@ urlpatterns = [
     path(
         "tasks/<slug:slug>/change-status/",
         ChangeTaskStatus.as_view(),
-        name="task-change-status"
+        name="task-change-status",
     ),
     path("workers/", WorkerListView.as_view(), name="worker-list"),
+    path("workers/create/", WorkerCreateView.as_view(), name="worker-create"),
+    path("workers/<slug:slug>/", WorkerDetailView.as_view(), name="worker-detail"),
     path(
-        "workers/create/",
-        WorkerCreateView.as_view(),
-        name="worker-create"
+        "workers/<slug:slug>/update/", WorkerUpdateView.as_view(), name="worker-update"
     ),
     path(
-        "workers/<slug:slug>/",
-         WorkerDetailView.as_view(),
-         name="worker-detail"
-    ),
-    path(
-        "workers/<slug:slug>/update/",
-        WorkerUpdateView.as_view(),
-        name="worker-update"
-    ),
-    path(
-        "workers/<slug:slug>/delete/",
-        WorkerDeleteView.as_view(),
-        name="worker-delete"
+        "workers/<slug:slug>/delete/", WorkerDeleteView.as_view(), name="worker-delete"
     ),
     path("positions/", PositionListView.as_view(), name="position-list"),
-    path(
-        "positions/create/",
-         PositionCreateView.as_view(),
-         name="position-create"
-    ),
+    path("positions/create/", PositionCreateView.as_view(), name="position-create"),
     path(
         "positions/<int:pk>/update/",
         PositionUpdateView.as_view(),
@@ -90,11 +74,7 @@ urlpatterns = [
         TaskTypeListView.as_view(),
         name="task-type-list",
     ),
-    path(
-        "task_types/create/",
-         TaskTypeCreateView.as_view(),
-         name="task-type-create"
-    ),
+    path("task_types/create/", TaskTypeCreateView.as_view(), name="task-type-create"),
     path(
         "task_types/<int:pk>/update/",
         TaskTypeUpdateView.as_view(),
@@ -110,11 +90,7 @@ urlpatterns = [
         TagListView.as_view(),
         name="tag-list",
     ),
-    path(
-        "tags/create/",
-         TagCreateView.as_view(),
-         name="tag-create"
-    ),
+    path("tags/create/", TagCreateView.as_view(), name="tag-create"),
     path(
         "tags/<int:pk>/update/",
         TagUpdateView.as_view(),

@@ -9,6 +9,7 @@
       <p><h7>Full name:</h7> {{ worker.first_name }} {{ worker.last_name }}</p>
       <p><h7>Position:</h7> {{ worker.position }}</p>
     </div>
+    {% if user.id == worker.id or user.is_superuser %}
     <div class="col-6 col-lg-4">
       <a href="{{ worker.get_absolute_url }}update" class="btn btn-secondary link-to-page btn-sm">
         Update Profile
@@ -17,6 +18,7 @@
         Delete User
       </a>
     </div>
+    {% endif %}
   </div>
 
   <div class="ml-3">
