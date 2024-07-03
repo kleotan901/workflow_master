@@ -65,7 +65,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = Task.objects.all().prefetch_related("assignees", "task_type")
+        queryset = Task.objects.all().prefetch_related("assignees", "task_type").order_by("id")
         form = TaskSearchForm(self.request.GET)
         if form.is_valid():
             return form.search(queryset)
@@ -123,7 +123,7 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = Worker.objects.prefetch_related("position")
+        queryset = Worker.objects.prefetch_related("position").order_by("id")
         form = WorkerSearchForm(self.request.GET)
         if form.is_valid():
             return form.search(queryset)
@@ -172,7 +172,7 @@ class PositionListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = Position.objects.prefetch_related("worker_set")
+        queryset = Position.objects.prefetch_related("worker_set").order_by("id")
         form = PositionSearchForm(self.request.GET)
         if form.is_valid():
             return queryset.filter(
@@ -212,7 +212,7 @@ class TaskTypeListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = TaskType.objects.prefetch_related("task_set")
+        queryset = TaskType.objects.prefetch_related("task_set").order_by("id")
         form = TaskTypeSearchForm(self.request.GET)
         if form.is_valid():
             return queryset.filter(
@@ -267,7 +267,7 @@ class TagListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = Tag.objects.prefetch_related("tasks")
+        queryset = Tag.objects.prefetch_related("tasks").order_by("id")
         form = TagSearchForm(self.request.GET)
         if form.is_valid():
             return queryset.filter(

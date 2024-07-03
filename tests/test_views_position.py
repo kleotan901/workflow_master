@@ -15,7 +15,7 @@ class PublicPositionTest(TestCase):
     def test_position_list_login_required(self):
         response = self.client.get(POSITION_LIST_URL)
         self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, "/accounts/login/?next=/task_manager/positions/")
+        self.assertRedirects(response, "/accounts/login/?next=/positions/")
 
 
 class PrivatePositionTest(TestCase):
@@ -24,7 +24,8 @@ class PrivatePositionTest(TestCase):
             Position.objects.create(name=f"Test {position_id}")
         self.user = get_user_model().objects.create_user(
             username="test",
-            password="test password"
+            password="test password",
+            slug="test"
         )
         self.client.force_login(self.user)
 
@@ -53,7 +54,7 @@ class PrivatePositionTest(TestCase):
         new_position = Position.objects.get(name=form_data["name"])
 
         self.assertEqual(new_position.name, form_data["name"])
-        self.assertRedirects(response, "/task_manager/positions/")
+        self.assertRedirects(response, "/positions/")
 
     def test_delete_position(self):
         position = Position.objects.get(pk=1)
@@ -66,7 +67,7 @@ class PrivatePositionTest(TestCase):
         )
 
     def test_position_search_matches_found(self):
-        response = self.client.get("/task_manager/positions/?name=Test+1")
+        response = self.client.get("/positions/?name=Test+1")
         searching_manufacturer = Position.objects.filter(name="Test 1")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -75,7 +76,7 @@ class PrivatePositionTest(TestCase):
         )
 
     def test_position_search_no_matches_found(self):
-        response = self.client.get("/task_manager/positions/?name=Fake+name")
+        response = self.client.get("/positions/?name=Fake+name")
         self.assertEqual(response.status_code, 200)
         self.assertContains(
             response,
@@ -83,11 +84,12 @@ class PrivatePositionTest(TestCase):
         )
 
     def test_pagination_position_search_with_value_current_page(self):
-        response = self.client.get("/task_manager/positions/?name=Test")
+        response = self.client.get("/positions/?name=Test")
+        print(response.context)
         self.assertTrue(response.context["is_paginated"] is True)
         self.assertEqual(len(response.context["position_list"]), 5)
 
     def test_pagination_position_search_with_value_next_page(self):
-        response = self.client.get("/task_manager/positions/?name=Test&page=2")
+        response = self.client.get("/positions/?name=Test&page=2")
         self.assertTrue(response.context["is_paginated"] is True)
         self.assertEqual(len(response.context["position_list"]), 3)

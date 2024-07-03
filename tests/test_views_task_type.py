@@ -15,7 +15,7 @@ class PublicTaskTypeTest(TestCase):
     def test_task_type_list_login_required(self):
         response = self.client.get(TASK_TYPE_LIST_URL)
         self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, "/accounts/login/?next=/task_manager/task_types/")
+        self.assertRedirects(response, "/accounts/login/?next=/task_types/")
 
 
 class PrivateTaskTypeTest(TestCase):
@@ -24,7 +24,8 @@ class PrivateTaskTypeTest(TestCase):
             TaskType.objects.create(name=f"Test {task_type_id}")
         self.user = get_user_model().objects.create_user(
             username="test",
-            password="test password"
+            password="test password",
+            slug="test"
         )
         self.client.force_login(self.user)
 
@@ -53,7 +54,7 @@ class PrivateTaskTypeTest(TestCase):
         task_type = TaskType.objects.get(name=form_data["name"])
 
         self.assertEqual(task_type.name, form_data["name"])
-        self.assertRedirects(response, "/task_manager/task_types/")
+        self.assertRedirects(response, "/task_types/")
 
     def test_delete_task_type(self):
         task_type = TaskType.objects.get(pk=1)
@@ -66,7 +67,7 @@ class PrivateTaskTypeTest(TestCase):
         )
 
     def test_task_type_search_matches_found(self):
-        response = self.client.get("/task_manager/task_types/?name=Test+1")
+        response = self.client.get("/task_types/?name=Test+1")
         searching_manufacturer = TaskType.objects.filter(name="Test 1")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
@@ -75,7 +76,7 @@ class PrivateTaskTypeTest(TestCase):
         )
 
     def test_task_type_search_no_matches_found(self):
-        response = self.client.get("/task_manager/task_types/?name=Fake+name")
+        response = self.client.get("/task_types/?name=Fake+name")
         self.assertEqual(response.status_code, 200)
         self.assertContains(
             response,
@@ -83,11 +84,11 @@ class PrivateTaskTypeTest(TestCase):
         )
 
     def test_pagination_task_type_search_with_value_current_page(self):
-        response = self.client.get("/task_manager/task_types/?name=Test")
+        response = self.client.get("/task_types/?name=Test")
         self.assertTrue(response.context["is_paginated"] is True)
         self.assertEqual(len(response.context["tasktype_list"]), 5)
 
     def test_pagination_task_type_search_with_value_next_page(self):
-        response = self.client.get("/task_manager/task_types/?name=Test&page=2")
+        response = self.client.get("/task_types/?name=Test&page=2")
         self.assertTrue(response.context["is_paginated"] is True)
         self.assertEqual(len(response.context["tasktype_list"]), 3)
