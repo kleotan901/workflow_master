@@ -26,7 +26,7 @@ python3 manage.py runserver #stsrts Django Server
 ```
 
  
-`python manage.py loaddata task_manager_db_data.json`
+`python manage.py loaddata workflow_master_db_data.json`
 
 - After loading data from fixture you can use following superuser:
   - Login: `admin`
