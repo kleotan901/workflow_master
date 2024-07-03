@@ -15,11 +15,12 @@ class WorkerFormTest(TestCase):
     def setUp(self) -> None:
         position = Position.objects.create(name="test position")
         get_user_model().objects.create_user(
-            username="TEST_user",
+            username="TEST user",
             password="test_Password123",
             first_name="test first_name",
             last_name="test last_name",
-            position=position
+            position=position,
+            slug="TEST-user"
         )
         self.user = get_user_model().objects.get(pk=1)
         self.client.force_login(self.user)
@@ -33,6 +34,7 @@ class WorkerFormTest(TestCase):
             "password1": "Test password123",
             "password2": "Test password123",
             "position": position,
+            "slug": "test-user1"
         }
         form = WorkerCreationForm(data=form_data)
         self.assertTrue(form.is_valid())
@@ -46,7 +48,7 @@ class WorkerFormTest(TestCase):
         self.assertTrue(search_form_first_name.is_valid())
         self.assertTrue(search_form_username.is_valid())
 
-        worker = Worker.objects.get(username="TEST_user")
+        worker = Worker.objects.get(username="TEST user")
         queryset = Worker.objects.filter(
             Q(username__icontains="test") |
             Q(first_name__icontains="first") |
@@ -70,15 +72,17 @@ class TaskFormTest(TestCase):
             task_type=task_type,
         )
         get_user_model().objects.create_user(
-            username="TeST_22!!",
+            username="user_ronny",
             password="test_Password123",
             first_name="test first_name",
             last_name="test last_name",
-            position=position
+            position=position,
+            slug="user_ronny"
         )
         self.user = get_user_model().objects.create_user(
             username="test",
-            password="test password"
+            password="test password",
+            slug="user_ronny"
         )
         self.client.force_login(self.user)
 
@@ -126,11 +130,12 @@ class TaskFormTest(TestCase):
         form_data = {
             "name": "test_task_1",
             "description": "Test description",
-            "deadline": date(year=2023, month=10, day=10),
+            "deadline": date(year=2300, month=10, day=10),
             "priority": "High priority",
             "task_type": task_type,
-            "assignees": [worker]
+            "assignees": [worker],
         }
+
         form = TaskForm(data=form_data)
         self.assertTrue(form.is_valid())
         self.assertEqual(list(form.cleaned_data["assignees"]),  form_data["assignees"])

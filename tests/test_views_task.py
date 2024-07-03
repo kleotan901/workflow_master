@@ -16,30 +16,31 @@ class PublicTaskTest(TestCase):
             name="Test task",
             description="test description_1",
             deadline=date(year=2023, month=10, day=2),
-            task_type=task_type
+            task_type=task_type,
+            slug="test-task"
         )
         self.client = Client()
 
     def test_login_required_task_list(self):
         response = self.client.get(TASK_LIST_URL)
         self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, "/accounts/login/?next=/task_manager/tasks/")
+        self.assertRedirects(response, "/accounts/login/?next=/tasks/")
 
     def test_login_required_task_detail(self):
         task_detail = Task.objects.get(pk=1)
         response = self.client.get(
-            reverse("task_manager:task-detail", kwargs={"pk": task_detail.pk})
+            reverse("task_manager:task-detail", kwargs={"slug": task_detail.slug})
         )
         self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, "/accounts/login/?next=/task_manager/tasks/1/")
+        self.assertRedirects(response, "/accounts/login/?next=/tasks/test-task/")
 
     def test_login_required_creation_task_form(self):
         response = self.client.get(reverse("task_manager:task-create"))
         self.assertNotEqual(response.status_code, 200)
-        self.assertRedirects(response, "/accounts/login/?next=/task_manager/tasks/create/")
+        self.assertRedirects(response, "/accounts/login/?next=/tasks/create/")
 
 
-class PrivateCarTest(TestCase):
+class PrivateTaskTest(TestCase):
     def setUp(self) -> None:
         task_type = TaskType.objects.create(name="Test type")
         position = Position.objects.create(name="test position_1")
@@ -47,19 +48,22 @@ class PrivateCarTest(TestCase):
             Task.objects.create(
                 name=f"Test task_{task_id}",
                 description="test description",
-                deadline=date(year=2023, month=10, day=10),
+                deadline=date(year=2323, month=10, day=10),
                 task_type=task_type,
                 priority="High priority",
+                slug=f"test-task_{task_id}"
             )
         get_user_model().objects.create_user(
             username="test_worker_1",
             password="test Password123",
-            position=position
+            position=position,
+            slug="test_worker_1"
         )
         get_user_model().objects.create_user(
             username="test_worker_2",
             password="test Password123",
-            position=position
+            position=position,
+            slug="test_worker_2"
         )
 
         self.user = get_user_model().objects.get(username="test_worker_1")
@@ -82,7 +86,7 @@ class PrivateCarTest(TestCase):
     def test_retrieve_task_detail(self):
         task_detail = Task.objects.get(pk=1)
         response = self.client.get(
-            reverse("task_manager:task-detail", kwargs={"pk": task_detail.pk})
+            reverse("task_manager:task-detail", kwargs={"slug": "test-task_0"})
         )
 
         self.assertEqual(response.status_code, 200)
@@ -94,7 +98,7 @@ class PrivateCarTest(TestCase):
         new_task.assignees.set([test_worker])
         response = self.client.get(reverse(
             "task_manager:task-detail",
-            kwargs={"pk": new_task.pk}
+            kwargs={"slug": new_task.slug}
         ))
 
         self.assertEqual(new_task.assignees.count(), 1)
@@ -103,7 +107,7 @@ class PrivateCarTest(TestCase):
 
         self.user.tasks.add(new_task)
         response = self.client.get(reverse(
-            "task_manager:task-detail", kwargs={"pk": new_task.pk}
+            "task_manager:task-detail", kwargs={"slug": new_task.slug}
         ))
 
         self.assertEqual(new_task.assignees.count(), 2)
@@ -119,9 +123,10 @@ class PrivateCarTest(TestCase):
                 "name": "Task Test",
                 "description": "test description",
                 "task_type": task_type.id,
-                "deadline": date(year=2023, month=10, day=2),
+                "deadline": date(year=2323, month=10, day=2),
                 "priority": "High priority",
                 "assignees": [worker.id],
+                "slug": "task-test"
             },
         )
         self.assertEqual(response.status_code, 302)
@@ -132,13 +137,13 @@ class PrivateCarTest(TestCase):
     def test_delete_task(self):
         task = Task.objects.get(name="Test task_1")
         response = self.client.post(
-            reverse("task_manager:task-delete", kwargs={"pk": task.id})
+            reverse("task_manager:task-delete", kwargs={"slug": "test-task_1"})
         )
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Task.objects.filter(pk=task.id).exists())
 
     def test_task_search_matches_found(self):
-        response = self.client.get("/task_manager/tasks/?search_query=Test task_1")
+        response = self.client.get("/tasks/?search_query=Test task_1")
         searching_task = Task.objects.filter(name="Test task_1")
 
         self.assertEqual(response.status_code, 200)
@@ -148,7 +153,7 @@ class PrivateCarTest(TestCase):
         )
 
     def test_task_search_no_matches_found(self):
-        response = self.client.get("/task_manager/tasks/?search_query=Fake+name")
+        response = self.client.get("/tasks/?search_query=Fake+name")
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "There are no tasks")
