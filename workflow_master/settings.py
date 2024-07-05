@@ -10,10 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
-import dj_database_url
+import sys
 from pathlib import Path
-from dotenv import load_dotenv
 
+import dj_database_url
+from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
@@ -40,7 +41,6 @@ ALLOWED_HOSTS = ["127.0.0.1", "task-manager-av4g.onrender.com"]
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-
 
 # Application definition
 
@@ -93,20 +93,32 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 WSGI_APPLICATION = "workflow_master.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("PGDATABASE"),
+        "USER": os.environ.get("PGUSER"),
+        "PASSWORD": os.environ.get("PGPASSWORD"),
+        "HOST": os.environ.get("PGHOST"),
+        "PORT": os.environ.get("PGPORT", 5432),
+        "OPTIONS": {
+            "sslmode": "require",
+        },
     }
 }
 
+if "test" in sys.argv:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES["default"].update(db_from_env)
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -130,7 +142,6 @@ AUTH_USER_MODEL = "task_manager.Worker"
 
 LOGIN_REDIRECT_URL = "/"
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -141,7 +152,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
